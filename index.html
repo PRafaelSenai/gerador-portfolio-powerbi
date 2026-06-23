@@ -5,150 +5,142 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gerador de Portfólio Power BI — SENAI</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
-  :root {
-    --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2e3247;
-    --accent:#f2a900;--accent2:#e07b00;--blue:#4f8ef7;--green:#22d3a0;
-    --red:#f25f5c;--text:#e8eaf0;--muted:#8891aa;--radius:12px;--radius-sm:8px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-  .app-header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
-  .app-logo{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#000;flex-shrink:0}
-  .app-title{font-size:15px;font-weight:700}
-  .app-subtitle{font-size:12px;color:var(--muted)}
-  .header-badge{margin-left:auto;background:rgba(242,169,0,.12);border:1px solid rgba(242,169,0,.3);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px}
-  .steps-nav{display:flex;align-items:center;justify-content:center;padding:24px 32px;gap:0;flex-wrap:wrap;row-gap:12px}
-  .step-item{display:flex;align-items:center;gap:8px;cursor:pointer}
-  .step-num{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);transition:all .2s;flex-shrink:0}
-  .step-label{font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap;transition:all .2s}
-  .step-item.active .step-num{background:var(--accent);border-color:var(--accent);color:#000}
-  .step-item.active .step-label{color:var(--accent)}
-  .step-item.done .step-num{background:var(--green);border-color:var(--green);color:#000}
-  .step-item.done .step-label{color:var(--green)}
-  .step-connector{width:40px;height:2px;background:var(--border);margin:0 4px}
-  .step-connector.done{background:var(--green)}
-  .main{max-width:900px;margin:0 auto;padding:0 24px 80px}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px}
-  .card-title{font-size:14px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-  .card-title::before{content:'';width:3px;height:16px;background:var(--accent);border-radius:2px}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .form-full{grid-column:1/-1}
-  .field{display:flex;flex-direction:column;gap:6px}
-  .field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-  .field input,.field textarea,.field select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;transition:border-color .2s;outline:none;resize:none}
-  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
-  .field input::placeholder,.field textarea::placeholder{color:var(--muted);opacity:.6}
-  .field select option{background:var(--surface2)}
-  .photo-area{display:flex;align-items:center;gap:20px;margin-bottom:24px}
-  .photo-preview{width:88px;height:88px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;overflow:hidden}
-  .photo-preview img{width:100%;height:100%;object-fit:cover}
-  .photo-btn{background:var(--surface2);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:10px 20px;color:var(--muted);cursor:pointer;font-size:13px;font-family:'Inter',sans-serif;transition:all .2s}
-  .photo-btn:hover{border-color:var(--accent);color:var(--accent)}
-  #photoInput{display:none}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2e3247;
+  --accent:#f2a900;--accent2:#e07b00;--blue:#4f8ef7;--green:#22d3a0;
+  --red:#f25f5c;--text:#e8eaf0;--muted:#8891aa;--radius:12px;--radius-sm:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app-header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.app-logo{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#000;flex-shrink:0}
+.app-title{font-size:15px;font-weight:700}
+.app-subtitle{font-size:12px;color:var(--muted)}
+.header-badge{margin-left:auto;background:rgba(242,169,0,.12);border:1px solid rgba(242,169,0,.3);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px}
+.steps-nav{display:flex;align-items:center;justify-content:center;padding:24px 32px;gap:0;flex-wrap:wrap;row-gap:12px}
+.step-item{display:flex;align-items:center;gap:8px;cursor:pointer}
+.step-num{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);transition:all .2s;flex-shrink:0}
+.step-label{font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap;transition:all .2s}
+.step-item.active .step-num{background:var(--accent);border-color:var(--accent);color:#000}
+.step-item.active .step-label{color:var(--accent)}
+.step-item.done .step-num{background:var(--green);border-color:var(--green);color:#000}
+.step-item.done .step-label{color:var(--green)}
+.step-connector{width:40px;height:2px;background:var(--border);margin:0 4px}
+.step-connector.done{background:var(--green)}
+.main{max-width:920px;margin:0 auto;padding:0 24px 80px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px}
+.card-title{font-size:14px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.card-title::before{content:'';width:3px;height:16px;background:var(--accent);border-radius:2px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.field input,.field textarea,.field select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;transition:border-color .2s;outline:none;resize:none}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted);opacity:.6}
+.field select option{background:var(--surface2)}
+.photo-area{display:flex;align-items:center;gap:20px;margin-bottom:24px}
+.photo-preview{width:88px;height:88px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;overflow:hidden}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.photo-btn{background:var(--surface2);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:10px 20px;color:var(--muted);cursor:pointer;font-size:13px;font-family:'Inter',sans-serif;transition:all .2s}
+.photo-btn:hover{border-color:var(--accent);color:var(--accent)}
+#photoInput{display:none}
 
-  /* ─── THEME PICKER ─── */
-  .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .theme-card{border:2px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
-  .theme-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .theme-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(242,169,0,.25)}
-  .theme-card.selected::after{content:'✓';position:absolute;top:6px;right:8px;background:var(--accent);color:#000;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
-  .theme-preview{height:80px;display:flex;flex-direction:column}
-  .theme-preview-bar{height:6px}
-  .theme-preview-body{flex:1;padding:8px;display:flex;flex-direction:column;justify-content:center;gap:4px}
-  .theme-preview-title{height:6px;border-radius:3px;width:70%}
-  .theme-preview-sub{height:4px;border-radius:2px;width:50%;opacity:.5}
-  .theme-preview-dots{display:flex;gap:4px;margin-top:6px}
-  .theme-preview-dot{width:12px;height:12px;border-radius:2px;opacity:.7}
-  .theme-name{padding:8px 10px;font-size:11px;font-weight:700;letter-spacing:.3px}
-  .theme-tag{font-size:9px;font-weight:400;opacity:.6;display:block;margin-top:1px}
+/* THEME PICKER */
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.theme-card{border:2px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+.theme-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 20px rgba(242,169,0,.15)}
+.theme-card.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(242,169,0,.2)}
+.theme-card.selected::after{content:'✓';position:absolute;top:6px;right:8px;background:var(--accent);color:#000;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;z-index:2}
+.theme-preview{height:72px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.theme-preview-bar{height:5px;flex-shrink:0}
+.theme-preview-body{flex:1;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.theme-preview-name{height:7px;border-radius:3px;width:65%}
+.theme-preview-sub{height:4px;border-radius:2px;width:40%;opacity:.5}
+.theme-preview-chips{display:flex;gap:4px;margin-top:5px}
+.theme-preview-chip{height:5px;border-radius:10px;opacity:.7}
+.theme-name{padding:8px 10px 10px;font-size:11px;font-weight:700;letter-spacing:.3px;border-top:1px solid rgba(0,0,0,.06)}
+.theme-tag{font-size:9px;font-weight:400;opacity:.55;display:block;margin-top:1px}
 
-  /* ─── SKILLS ─── */
-  .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-  .skill-tag{background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
-  .skill-tag:hover{background:rgba(79,142,247,.25)}
-  .skill-tag.selected{background:var(--blue);color:#fff;border-color:var(--blue)}
+/* SKILLS */
+.skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.skill-chip{display:inline-flex;align-items:center;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;user-select:none;transition:all .18s;border:1px solid var(--border);background:var(--surface2);color:var(--muted)}
+.skill-chip:hover{border-color:var(--blue);color:var(--blue);background:rgba(79,142,247,.08)}
+.skill-chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 
-  /* ─── PROJECT CARDS ─── */
-  .project-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0;margin-bottom:16px;overflow:hidden}
-  .proj-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
-  .project-num{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px}
-  .btn-remove{background:rgba(242,95,92,.12);border:1px solid rgba(242,95,92,.25);color:var(--red);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
-  .btn-remove:hover{background:rgba(242,95,92,.25)}
-  .proj-body{padding:18px}
+/* PROJECT CARD */
+.project-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:16px;overflow:hidden}
+.proj-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.15)}
+.project-num{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px}
+.btn-remove{background:rgba(242,95,92,.12);border:1px solid rgba(242,95,92,.25);color:var(--red);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-remove:hover{background:rgba(242,95,92,.3)}
+.proj-body{padding:18px}
 
-  /* ─── MINIATURA ─── */
-  .thumb-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
-  .thumb-box{
-    width:200px;flex-shrink:0;height:120px;
-    background:var(--bg);border:1px dashed var(--border);border-radius:8px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:6px;overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s;
-  }
-  .thumb-box:hover{border-color:var(--accent)}
-  .thumb-box img{width:100%;height:100%;object-fit:cover;border-radius:7px}
-  .thumb-placeholder{font-size:11px;color:var(--muted);text-align:center;padding:8px;line-height:1.5}
-  .thumb-placeholder span{font-size:22px;display:block;margin-bottom:4px}
-  .thumb-overlay{
-    position:absolute;inset:0;background:rgba(0,0,0,.6);
-    display:none;align-items:center;justify-content:center;
-    border-radius:7px;gap:6px;flex-direction:column;
-  }
-  .thumb-box:hover .thumb-overlay{display:flex}
-  .thumb-overlay-btn{background:var(--accent);color:#000;font-size:10px;font-weight:700;padding:5px 10px;border-radius:5px;font-family:'Inter',sans-serif;cursor:pointer;border:none}
-  .thumb-overlay-del{background:rgba(242,95,92,.8);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:5px;font-family:'Inter',sans-serif;cursor:pointer;border:none}
-  .thumb-fields{flex:1;display:flex;flex-direction:column;gap:10px}
-  .thumb-status{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;display:inline-flex;align-items:center;gap:4px;margin-top:4px;width:fit-content}
-  .thumb-status.ok{background:rgba(34,211,160,.12);color:var(--green);border:1px solid rgba(34,211,160,.25)}
-  .thumb-status.none{background:rgba(136,145,170,.1);color:var(--muted);border:1px solid rgba(136,145,170,.2)}
+/* MINIATURA DO PROJETO */
+.thumb-area{display:flex;gap:16px;margin-bottom:16px;align-items:flex-start}
+.thumb-box{width:220px;flex-shrink:0;height:130px;border-radius:8px;overflow:hidden;border:1px solid var(--border);position:relative;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+.thumb-box iframe{width:100%;height:100%;border:none;pointer-events:none;transform-origin:top left}
+.thumb-box .thumb-ph{font-size:11px;color:var(--muted);text-align:center;padding:10px;line-height:1.5;pointer-events:none}
+.thumb-box .thumb-ph-icon{font-size:24px;display:block;margin-bottom:4px}
+.thumb-spinner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);flex-direction:column;gap:8px;font-size:11px;color:var(--muted)}
+.spinner-ring{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.thumb-og{width:100%;height:100%;object-fit:cover;display:block}
+.thumb-error{font-size:10px;color:var(--muted);text-align:center;padding:8px;line-height:1.4}
+.thumb-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.thumb-status-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px}
+.thumb-badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:600;white-space:nowrap}
+.thumb-badge.ok{background:rgba(34,211,160,.12);color:var(--green);border:1px solid rgba(34,211,160,.25)}
+.thumb-badge.loading{background:rgba(242,169,0,.12);color:var(--accent);border:1px solid rgba(242,169,0,.25)}
+.thumb-badge.none{background:rgba(136,145,170,.1);color:var(--muted);border:1px solid rgba(136,145,170,.2)}
+.btn-fetch{background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.3);color:var(--blue);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap}
+.btn-fetch:hover{background:rgba(79,142,247,.25)}
+.btn-fetch:disabled{opacity:.4;cursor:not-allowed}
 
-  .btn-add-project{width:100%;padding:12px;background:transparent;border:1px dashed var(--border);border-radius:var(--radius-sm);color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all .2s}
-  .btn-add-project:hover{border-color:var(--accent);color:var(--accent)}
-  .action-bar{display:flex;gap:12px;justify-content:flex-end;margin-top:8px}
-  .btn{padding:11px 24px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
-  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
-  .btn-ghost:hover{border-color:var(--text);color:var(--text)}
-  .btn-primary{background:var(--accent);color:#000}
-  .btn-primary:hover{background:var(--accent2)}
-  .btn-green{background:var(--green);color:#000}
-  .btn-green:hover{opacity:.9}
-  .page{display:none}
-  .page.active{display:block}
-  .preview-banner{background:linear-gradient(135deg,rgba(242,169,0,.08),rgba(79,142,247,.08));border:1px solid rgba(242,169,0,.2);border-radius:var(--radius);padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted)}
-  .preview-banner span{font-size:22px}
-  .preview-banner strong{color:var(--text)}
-  .checklist{display:flex;flex-direction:column;gap:10px;margin:16px 0}
-  .check-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface2);border-radius:var(--radius-sm);padding:14px}
-  .check-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:1px}
-  .check-icon.done{background:rgba(34,211,160,.15);color:var(--green)}
-  .check-icon.info{background:rgba(79,142,247,.15);color:var(--blue)}
-  .check-icon.warn{background:rgba(242,169,0,.15);color:var(--accent)}
-  .check-text strong{font-size:13px;color:var(--text);display:block;margin-bottom:3px}
-  .check-text span{font-size:12px;color:var(--muted);line-height:1.5}
-  .guide-step{display:flex;gap:16px;margin-bottom:0}
-  .guide-step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#000;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-  .guide-step-connector{width:2px;background:var(--border);margin-left:13px;height:20px}
-  .guide-step h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
-  .guide-step p{font-size:12px;color:var(--muted);line-height:1.6}
-  .code-inline{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 7px;font-family:'Fira Code',monospace;font-size:11px;color:var(--accent)}
-  .download-box{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;margin-bottom:20px}
-  .download-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
-  .download-box p{font-size:13px;color:var(--muted);margin-bottom:20px}
-  .download-files{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .file-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 16px;font-size:12px;color:var(--text)}
-  .file-chip .ext{color:var(--accent);font-weight:700;font-family:'Fira Code',monospace}
-  .linkedin-msg{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;font-family:'Inter',sans-serif;margin-top:8px}
-  .copy-btn{background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);color:var(--blue);border-radius:6px;padding:6px 14px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-top:8px;float:right}
-  .copy-btn:hover{background:rgba(79,142,247,.25)}
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#000;padding:12px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s}
-  .toast.show{transform:translateY(0);opacity:1}
-  @media(max-width:640px){
-    .form-grid{grid-template-columns:1fr}
-    .steps-nav{gap:4px}.step-connector{width:20px}.step-label{display:none}
-    .main{padding:0 16px 80px}.app-header{padding:12px 16px}
-    .theme-grid{grid-template-columns:repeat(2,1fr)}
-    .thumb-row{flex-direction:column}.thumb-box{width:100%}
-  }
+.btn-add-project{width:100%;padding:12px;background:transparent;border:1px dashed var(--border);border-radius:var(--radius-sm);color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all .2s}
+.btn-add-project:hover{border-color:var(--accent);color:var(--accent)}
+.action-bar{display:flex;gap:12px;justify-content:flex-end;margin-top:8px}
+.btn{padding:11px 24px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:var(--accent2)}
+.btn-green{background:var(--green);color:#000}
+.btn-green:hover{opacity:.9}
+.page{display:none}.page.active{display:block}
+.info-banner{background:linear-gradient(135deg,rgba(79,142,247,.08),rgba(34,211,160,.06));border:1px solid rgba(79,142,247,.2);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;font-size:12px;color:var(--muted);line-height:1.6}
+.info-banner strong{color:var(--text)}
+.guide-step{display:flex;gap:16px;margin-bottom:0}
+.guide-step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#000;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.guide-step-conn{width:2px;background:var(--border);margin-left:13px;height:18px}
+.guide-step h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.guide-step p{font-size:12px;color:var(--muted);line-height:1.6}
+.code-inline{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 7px;font-family:'Fira Code',monospace;font-size:11px;color:var(--accent)}
+.download-box{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;margin-bottom:20px}
+.download-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.download-box p{font-size:13px;color:var(--muted);margin-bottom:20px}
+.dl-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.lmsg{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;font-family:'Inter',sans-serif;margin-top:8px}
+.copy-btn{background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);color:var(--blue);border-radius:6px;padding:6px 14px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-top:8px;float:right}
+.copy-btn:hover{background:rgba(79,142,247,.25)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#000;padding:12px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.checklist{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.check-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px}
+.check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px}
+.check-icon.ok{background:rgba(34,211,160,.15);color:var(--green)}
+.check-icon.tip{background:rgba(79,142,247,.15);color:var(--blue)}
+.check-icon.warn{background:rgba(242,169,0,.15);color:var(--accent)}
+.check-text strong{font-size:13px;color:var(--text);display:block;margin-bottom:2px}
+.check-text span{font-size:11px;color:var(--muted);line-height:1.5}
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .steps-nav{gap:4px}.step-connector{width:18px}.step-label{display:none}
+  .main{padding:0 14px 80px}.app-header{padding:12px 16px}
+  .theme-grid{grid-template-columns:repeat(2,1fr)}
+  .thumb-area{flex-direction:column}.thumb-box{width:100%;height:160px}
+}
 </style>
 </head>
 <body>
@@ -160,15 +152,15 @@
 </header>
 
 <nav class="steps-nav">
-  <div class="step-item active" onclick="goTo(0)" id="step0"><div class="step-num">1</div><div class="step-label">Sobre Você</div></div>
+  <div class="step-item active" id="step0" onclick="goTo(0)"><div class="step-num">1</div><div class="step-label">Sobre Você</div></div>
   <div class="step-connector" id="conn0"></div>
-  <div class="step-item" onclick="goTo(1)" id="step1"><div class="step-num">2</div><div class="step-label">Tema Visual</div></div>
+  <div class="step-item" id="step1" onclick="goTo(1)"><div class="step-num">2</div><div class="step-label">Tema</div></div>
   <div class="step-connector" id="conn1"></div>
-  <div class="step-item" onclick="goTo(2)" id="step2"><div class="step-num">3</div><div class="step-label">Habilidades</div></div>
+  <div class="step-item" id="step2" onclick="goTo(2)"><div class="step-num">3</div><div class="step-label">Habilidades</div></div>
   <div class="step-connector" id="conn2"></div>
-  <div class="step-item" onclick="goTo(3)" id="step3"><div class="step-num">4</div><div class="step-label">Projetos</div></div>
+  <div class="step-item" id="step3" onclick="goTo(3)"><div class="step-num">4</div><div class="step-label">Projetos</div></div>
   <div class="step-connector" id="conn3"></div>
-  <div class="step-item" onclick="goTo(4)" id="step4"><div class="step-num">5</div><div class="step-label">Portfólio Pronto</div></div>
+  <div class="step-item" id="step4" onclick="goTo(4)"><div class="step-num">5</div><div class="step-label">Pronto!</div></div>
 </nav>
 
 <main class="main">
@@ -196,14 +188,14 @@
       <div class="field"><label>GitHub (URL)</label><input id="github" type="url" placeholder="https://github.com/seuperfil"></div>
     </div>
   </div>
-  <div class="action-bar"><button class="btn btn-primary" onclick="goTo(1)">Próximo: Tema Visual →</button></div>
+  <div class="action-bar"><button class="btn btn-primary" onclick="goTo(1)">Próximo: Tema →</button></div>
 </div>
 
 <!-- PAGE 1 -->
 <div class="page" id="page1">
   <div class="card">
-    <div class="card-title">Escolha o Tema do Portfólio</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Cada tema foi desenhado para um perfil diferente. Escolha o que melhor representa sua área de atuação.</p>
+    <div class="card-title">Tema do Portfólio</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Escolha o tema que melhor representa sua área de atuação. Temas claros tendem a parecer mais formais e corporativos.</p>
     <div class="theme-grid" id="themeGrid"></div>
   </div>
   <div class="action-bar">
@@ -216,13 +208,13 @@
 <div class="page" id="page2">
   <div class="card">
     <div class="card-title">Habilidades Técnicas</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Clique nas habilidades que você domina.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Clique nas habilidades que você domina — elas ficam destacadas em azul.</p>
     <div class="skills-wrap" id="skillsWrap"></div>
-    <div class="field" style="margin-top:16px">
+    <div class="field" style="margin-top:18px">
       <label>Adicionar habilidade personalizada</label>
       <div style="display:flex;gap:8px">
-        <input id="customSkill" type="text" placeholder="Ex: Storytelling com Dados" style="flex:1">
-        <button class="btn btn-ghost" onclick="addCustomSkill()" style="white-space:nowrap;padding:10px 16px">+ Adicionar</button>
+        <input id="customSkill" type="text" placeholder="Ex: Google Sheets, Metabase..." style="flex:1">
+        <button class="btn btn-ghost" id="btnAddSkill" style="white-space:nowrap;padding:10px 16px">+ Adicionar</button>
       </div>
     </div>
   </div>
@@ -231,7 +223,7 @@
     <div class="form-grid">
       <div class="field"><label>Curso principal</label><input id="curso" type="text" placeholder="Ex: Técnico em Análise de Dados — SENAI"></div>
       <div class="field"><label>Ano de conclusão</label><input id="anoCurso" type="text" placeholder="Ex: 2025"></div>
-      <div class="field form-full"><label>Certificações (uma por linha)</label><textarea id="certs" rows="3" placeholder="Microsoft PL-300&#10;Google Data Analytics Professional Certificate"></textarea></div>
+      <div class="field form-full"><label>Certificações (uma por linha)</label><textarea id="certs" rows="3" placeholder="Microsoft PL-300 — Power BI Data Analyst&#10;Google Data Analytics Professional Certificate"></textarea></div>
     </div>
   </div>
   <div class="action-bar">
@@ -242,15 +234,15 @@
 
 <!-- PAGE 3 -->
 <div class="page" id="page3">
-  <div class="preview-banner">
-    <span>🖼️</span>
-    <div><strong>Miniatura do projeto:</strong> após colar o link, clique em <strong>📎 Adicionar print</strong> para carregar um screenshot do seu dashboard — ele aparecerá no portfólio final como capa do projeto.</div>
+  <div class="info-banner">
+    <span style="font-size:20px;flex-shrink:0">🔗</span>
+    <div><strong>Como funciona a miniatura:</strong> cole o link do projeto (Power BI Service, GitHub, etc.) e clique em <strong>"Carregar miniatura"</strong>. O sistema buscará automaticamente a imagem de pré-visualização do link. Se não encontrar, você pode digitar manualmente a URL de uma imagem do projeto.</div>
   </div>
   <div id="projectsContainer"></div>
-  <button class="btn-add-project" onclick="addProject()">+ Adicionar projeto</button>
+  <button class="btn-add-project" id="btnAddProject">+ Adicionar projeto</button>
   <div class="action-bar" style="margin-top:20px">
     <button class="btn btn-ghost" onclick="goTo(2)">← Voltar</button>
-    <button class="btn btn-green" onclick="gerar()">✦ Gerar Portfólio</button>
+    <button class="btn btn-green" id="btnGerar">✦ Gerar Portfólio</button>
   </div>
 </div>
 
@@ -258,51 +250,45 @@
 <div class="page" id="page4">
   <div class="download-box">
     <h3>🎉 Portfólio gerado com sucesso!</h3>
-    <p>Seus arquivos estão prontos para download.</p>
-    <div class="download-files">
-      <div class="file-chip"><span class="ext">.HTML</span> Portfólio interativo</div>
-      <div class="file-chip"><span class="ext">.HTML</span> Guia de publicação</div>
-    </div>
-    <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="downloadPortfolio()">⬇ Baixar Portfólio (index.html)</button>
-      <button class="btn btn-ghost" onclick="downloadGuia()">⬇ Baixar Guia de Publicação</button>
+    <p>Arquivos prontos para download.</p>
+    <div class="dl-btns">
+      <button class="btn btn-primary" id="btnDlPortfolio">⬇ Baixar Portfólio (index.html)</button>
+      <button class="btn btn-ghost" id="btnDlGuia">⬇ Baixar Guia de Publicação</button>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">Como Publicar Online</div>
-    <div style="display:flex;flex-direction:column;gap:16px">
-      <div style="background:rgba(34,211,160,.06);border:1px solid rgba(34,211,160,.2);border-radius:10px;padding:20px">
-        <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px"><span>🐙</span> PARTE 1 — GitHub Pages (Site Gratuito)</div>
-        <div class="guide-step"><div class="guide-step-num">1</div><div><h4>Criar conta no GitHub</h4><p>Acesse <strong>github.com</strong> e crie uma conta gratuita.</p></div></div>
-        <div class="guide-step-connector"></div>
-        <div class="guide-step"><div class="guide-step-num">2</div><div><h4>Criar repositório especial</h4><p><strong>New</strong> → nome: <span class="code-inline">seuusuario.github.io</span> → <strong>Public</strong> → <strong>Create repository</strong>.</p></div></div>
-        <div class="guide-step-connector"></div>
-        <div class="guide-step"><div class="guide-step-num">3</div><div><h4>Upload do index.html</h4><p><strong>Add file → Upload files</strong> → arraste o <span class="code-inline">index.html</span> → escreva "Portfólio inicial" → <strong>Commit changes</strong>.</p></div></div>
-        <div class="guide-step-connector"></div>
-        <div class="guide-step"><div class="guide-step-num">4</div><div><h4>Acessar o site</h4><p>Em até 2 min estará em: <span class="code-inline">https://seuusuario.github.io</span> 🎉</p></div></div>
-        <div class="guide-step-connector"></div>
-        <div class="guide-step"><div class="guide-step-num">5</div><div><h4>Atualizar</h4><p>Delete o antigo e suba o novo <span class="code-inline">index.html</span>. Atualiza automaticamente.</p></div></div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:rgba(34,211,160,.05);border:1px solid rgba(34,211,160,.18);border-radius:10px;padding:20px">
+        <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:14px">🐙 PARTE 1 — GitHub Pages</div>
+        <div class="guide-step"><div class="guide-step-num">1</div><div><h4>Criar conta</h4><p>Acesse <strong>github.com</strong> e crie conta gratuita.</p></div></div>
+        <div class="guide-step-conn"></div>
+        <div class="guide-step"><div class="guide-step-num">2</div><div><h4>Repositório especial</h4><p><strong>New</strong> → nome: <span class="code-inline">seuusuario.github.io</span> → Public → Create repository.</p></div></div>
+        <div class="guide-step-conn"></div>
+        <div class="guide-step"><div class="guide-step-num">3</div><div><h4>Upload do index.html</h4><p><strong>Add file → Upload files</strong> → arraste o <span class="code-inline">index.html</span> → Commit changes.</p></div></div>
+        <div class="guide-step-conn"></div>
+        <div class="guide-step"><div class="guide-step-num">4</div><div><h4>Acessar</h4><p>Em até 2 minutos: <span class="code-inline">https://seuusuario.github.io</span> 🎉</p></div></div>
       </div>
-      <div style="background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.2);border-radius:10px;padding:20px">
-        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:14px;display:flex;align-items:center;gap:8px"><span>💼</span> PARTE 2 — LinkedIn</div>
-        <div class="guide-step"><div class="guide-step-num">1</div><div><h4>Link no perfil</h4><p><strong>Editar perfil → Websites</strong> → <span class="code-inline">https://seuusuario.github.io</span></p></div></div>
-        <div class="guide-step-connector"></div>
-        <div class="guide-step"><div class="guide-step-num">2</div><div><h4>Fixar em Destaque</h4><p><strong>Adicionar seção → Em Destaque → Link</strong> → cole o link. Fica no topo do perfil.</p></div></div>
-        <div class="guide-step-connector"></div>
-        <div class="guide-step"><div class="guide-step-num">3</div><div><h4>Post de lançamento</h4><p>Use o modelo abaixo. Adicione um print do portfólio — posts com imagem têm 3× mais alcance.</p></div></div>
-        <div id="linkedinMsg" class="linkedin-msg" style="margin:12px 0"></div>
-        <button class="copy-btn" onclick="copyLinkedin()">📋 Copiar texto</button>
+      <div style="background:rgba(79,142,247,.05);border:1px solid rgba(79,142,247,.18);border-radius:10px;padding:20px">
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:14px">💼 PARTE 2 — LinkedIn</div>
+        <div class="guide-step"><div class="guide-step-num">1</div><div><h4>Link no perfil</h4><p>Editar perfil → Websites → <span class="code-inline">https://seuusuario.github.io</span></p></div></div>
+        <div class="guide-step-conn"></div>
+        <div class="guide-step"><div class="guide-step-num">2</div><div><h4>Em Destaque</h4><p>Adicionar seção → Em Destaque → Link → cole o link.</p></div></div>
+        <div class="guide-step-conn"></div>
+        <div class="guide-step"><div class="guide-step-num">3</div><div><h4>Post de lançamento</h4><p>Copie e use o texto abaixo. Adicione um print do portfólio — posts com imagem têm 3× mais alcance.</p></div></div>
+        <div id="linkedinMsg" class="lmsg" style="margin:10px 0"></div>
+        <button class="copy-btn" id="btnCopyLinkedin">📋 Copiar texto</button>
         <div style="clear:both"></div>
       </div>
-      <div style="background:rgba(242,169,0,.06);border:1px solid rgba(242,169,0,.2);border-radius:10px;padding:20px">
-        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px"><span>📨</span> PARTE 3 — Recrutadores</div>
-        <div class="guide-step"><div class="guide-step-num">1</div><div><h4>Mensagem direta no LinkedIn</h4><p>Perfil do recrutador → <strong>Conectar → Adicionar nota</strong> → use o modelo abaixo:</p></div></div>
-        <div id="recruiterMsg" class="linkedin-msg" style="margin:12px 0;border-color:rgba(242,169,0,.2)"></div>
-        <button class="copy-btn" onclick="copyRecruiter()" style="background:rgba(242,169,0,.12);border-color:rgba(242,169,0,.25);color:var(--accent)">📋 Copiar</button>
+      <div style="background:rgba(242,169,0,.05);border:1px solid rgba(242,169,0,.18);border-radius:10px;padding:20px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px">📨 PARTE 3 — Recrutadores</div>
+        <div class="guide-step"><div class="guide-step-num">1</div><div><h4>Mensagem direta</h4><p>Perfil do recrutador → Conectar → Adicionar nota → cole o modelo abaixo:</p></div></div>
+        <div id="recruiterMsg" class="lmsg" style="margin:10px 0;border-color:rgba(242,169,0,.2)"></div>
+        <button class="copy-btn" id="btnCopyRecruiter" style="background:rgba(242,169,0,.1);border-color:rgba(242,169,0,.25);color:var(--accent)">📋 Copiar</button>
         <div style="clear:both;margin-bottom:8px"></div>
-        <div class="guide-step-connector"></div>
-        <div class="guide-step"><div class="guide-step-num">2</div><div><h4>Incluir no currículo</h4><p><strong>Portfólio:</strong> <span class="code-inline">https://seuusuario.github.io</span></p></div></div>
+        <div class="guide-step-conn"></div>
+        <div class="guide-step"><div class="guide-step-num">2</div><div><h4>No currículo</h4><p>Seção de contatos: <strong>Portfólio:</strong> <span class="code-inline">https://seuusuario.github.io</span></p></div></div>
       </div>
     </div>
   </div>
@@ -310,18 +296,18 @@
   <div class="card">
     <div class="card-title">✅ Checklist</div>
     <div class="checklist">
-      <div class="check-item"><div class="check-icon done">✓</div><div class="check-text"><strong>Portfólio publicado no GitHub Pages</strong><span>O link abre corretamente em celular e computador</span></div></div>
-      <div class="check-item"><div class="check-icon done">✓</div><div class="check-text"><strong>Foto profissional no portfólio</strong><span>Fundo neutro, boa iluminação, roupa adequada</span></div></div>
-      <div class="check-item"><div class="check-icon done">✓</div><div class="check-text"><strong>Miniaturas dos projetos adicionadas</strong><span>Cada projeto tem uma imagem de capa no portfólio</span></div></div>
-      <div class="check-item"><div class="check-icon done">✓</div><div class="check-text"><strong>Links dos projetos funcionando</strong><span>Clique em cada "Ver Projeto" e confirme que abre</span></div></div>
-      <div class="check-item"><div class="check-icon info">💡</div><div class="check-text"><strong>Link no perfil do LinkedIn</strong><span>Seção "Websites" + seção "Em Destaque" fixada</span></div></div>
-      <div class="check-item"><div class="check-icon warn">⚠</div><div class="check-text"><strong>Currículo atualizado</strong><span>Inclua o link na seção de contatos do currículo</span></div></div>
+      <div class="check-item"><div class="check-icon ok">✓</div><div class="check-text"><strong>Portfólio publicado no GitHub Pages</strong><span>Link abre corretamente em celular e computador</span></div></div>
+      <div class="check-item"><div class="check-icon ok">✓</div><div class="check-text"><strong>Foto profissional adicionada</strong><span>Fundo neutro, boa iluminação, roupa adequada</span></div></div>
+      <div class="check-item"><div class="check-icon ok">✓</div><div class="check-text"><strong>Miniaturas dos projetos carregadas</strong><span>Cada projeto tem uma imagem de pré-visualização</span></div></div>
+      <div class="check-item"><div class="check-icon ok">✓</div><div class="check-text"><strong>Links dos projetos funcionando</strong><span>Confirme que cada "Ver Projeto" abre o dashboard</span></div></div>
+      <div class="check-item"><div class="check-icon tip">💡</div><div class="check-text"><strong>Link no perfil do LinkedIn</strong><span>Websites + seção Em Destaque fixada no topo</span></div></div>
+      <div class="check-item"><div class="check-icon warn">⚠</div><div class="check-text"><strong>Currículo atualizado com link</strong><span>Portfólio: https://seuusuario.github.io</span></div></div>
     </div>
   </div>
 
   <div class="action-bar">
     <button class="btn btn-ghost" onclick="goTo(3)">← Editar projetos</button>
-    <button class="btn btn-primary" onclick="downloadPortfolio()">⬇ Baixar index.html</button>
+    <button class="btn btn-primary" id="btnDlPortfolio2">⬇ Baixar index.html</button>
   </div>
 </div>
 
@@ -329,90 +315,267 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ══ TEMAS ══
+// ═══════════════════════════════════════
+// TEMAS
+// ═══════════════════════════════════════
 const THEMES = {
-  executivo:{label:'Executivo',tag:'Finanças · Gestão · Controladoria',bg:'#0d1117',surface:'#161b22',surface2:'#21262d',border:'#30363d',text:'#c9d1d9',muted:'#6e7681',accent:'#58a6ff',accent2:'#388bfd',heroGrad:'linear-gradient(160deg,#161b22 0%,#0d1117 100%)',skillBg:'rgba(56,139,253,0.1)',skillBorder:'rgba(56,139,253,0.3)',skillColor:'#79c0ff',btnColor:'#238636',btnText:'#fff',cardRadius:'6px',fontFamily:"'Segoe UI',system-ui,sans-serif",headerStyle:'minimal',projLayout:'list',previewBg:'#0d1117',previewBar:'#58a6ff',previewTitle:'#c9d1d9',previewDot:'#388bfd'},
-  financeiro:{label:'Financeiro',tag:'Bancos · Seguros · Investimentos',bg:'#0a0e1a',surface:'#111827',surface2:'#1c2333',border:'#1e3a5f',text:'#e2e8f0',muted:'#64748b',accent:'#3b82f6',accent2:'#2563eb',heroGrad:'linear-gradient(160deg,#0f2167 0%,#0a0e1a 60%)',skillBg:'rgba(59,130,246,0.1)',skillBorder:'rgba(59,130,246,0.3)',skillColor:'#93c5fd',btnColor:'#1d4ed8',btnText:'#fff',cardRadius:'4px',fontFamily:"'Calibri','Segoe UI',sans-serif",headerStyle:'stripe',projLayout:'grid',previewBg:'#0a0e1a',previewBar:'#3b82f6',previewTitle:'#e2e8f0',previewDot:'#1d4ed8'},
-  saude:{label:'Saúde',tag:'Hospitais · Clínicas · Farmacêutico',bg:'#f0fdf4',surface:'#ffffff',surface2:'#f0fdf4',border:'#bbf7d0',text:'#14532d',muted:'#4ade80',accent:'#16a34a',accent2:'#15803d',heroGrad:'linear-gradient(160deg,#dcfce7 0%,#ffffff 100%)',skillBg:'rgba(22,163,74,0.08)',skillBorder:'rgba(22,163,74,0.25)',skillColor:'#15803d',btnColor:'#16a34a',btnText:'#fff',cardRadius:'12px',fontFamily:"'Segoe UI',Arial,sans-serif",headerStyle:'clean',projLayout:'grid',previewBg:'#f0fdf4',previewBar:'#16a34a',previewTitle:'#14532d',previewDot:'#4ade80'},
-  tecnologia:{label:'Tecnologia',tag:'TI · Startups · SaaS · Dados',bg:'#09090b',surface:'#18181b',surface2:'#27272a',border:'#3f3f46',text:'#fafafa',muted:'#71717a',accent:'#a78bfa',accent2:'#7c3aed',heroGrad:'linear-gradient(160deg,#1e1b4b 0%,#09090b 60%)',skillBg:'rgba(167,139,250,0.1)',skillBorder:'rgba(167,139,250,0.3)',skillColor:'#c4b5fd',btnColor:'#7c3aed',btnText:'#fff',cardRadius:'8px',fontFamily:"'Inter',system-ui,sans-serif",headerStyle:'glow',projLayout:'grid',previewBg:'#09090b',previewBar:'#a78bfa',previewTitle:'#fafafa',previewDot:'#7c3aed'},
-  varejo:{label:'Varejo & Marketing',tag:'E-commerce · Retail · Growth',bg:'#fff7ed',surface:'#ffffff',surface2:'#fff7ed',border:'#fed7aa',text:'#431407',muted:'#9a3412',accent:'#ea580c',accent2:'#c2410c',heroGrad:'linear-gradient(160deg,#ffedd5 0%,#ffffff 100%)',skillBg:'rgba(234,88,12,0.08)',skillBorder:'rgba(234,88,12,0.25)',skillColor:'#c2410c',btnColor:'#ea580c',btnText:'#fff',cardRadius:'16px',fontFamily:"'Segoe UI',Arial,sans-serif",headerStyle:'bold',projLayout:'grid',previewBg:'#fff7ed',previewBar:'#ea580c',previewTitle:'#431407',previewDot:'#fb923c'},
-  industria:{label:'Indústria & Logística',tag:'Manufatura · Supply Chain · OEE',bg:'#111111',surface:'#1a1a1a',surface2:'#222222',border:'#333333',text:'#f5f5f5',muted:'#888888',accent:'#f5a623',accent2:'#d4891a',heroGrad:'linear-gradient(160deg,#1a1200 0%,#111111 70%)',skillBg:'rgba(245,166,35,0.1)',skillBorder:'rgba(245,166,35,0.3)',skillColor:'#fbbf24',btnColor:'#f5a623',btnText:'#000',cardRadius:'2px',fontFamily:"'Roboto','Segoe UI',sans-serif",headerStyle:'industrial',projLayout:'list',previewBg:'#111111',previewBar:'#f5a623',previewTitle:'#f5f5f5',previewDot:'#d4891a'}
+  // ── ESCUROS ──
+  executivo: {
+    label:'Executivo Dark', tag:'Gestão · Controladoria · C-Level', dark:true,
+    bg:'#0d1117', surface:'#161b22', surface2:'#21262d', border:'#30363d',
+    text:'#c9d1d9', muted:'#6e7681', accent:'#58a6ff', accent2:'#388bfd',
+    heroGrad:'linear-gradient(160deg,#161b22,#0d1117)',
+    skillBg:'rgba(56,139,253,.1)', skillBorder:'rgba(56,139,253,.3)', skillColor:'#79c0ff',
+    btnColor:'#238636', btnText:'#fff', cardRadius:'6px',
+    fontFamily:"'Segoe UI',system-ui,sans-serif", projLayout:'list',
+    bar:'#58a6ff', dot1:'#388bfd', dot2:'#238636',
+  },
+  tech: {
+    label:'Tech / Dados', tag:'TI · Startups · SaaS · Analytics', dark:true,
+    bg:'#09090b', surface:'#18181b', surface2:'#27272a', border:'#3f3f46',
+    text:'#fafafa', muted:'#71717a', accent:'#a78bfa', accent2:'#7c3aed',
+    heroGrad:'linear-gradient(160deg,#1e1b4b,#09090b)',
+    skillBg:'rgba(167,139,250,.1)', skillBorder:'rgba(167,139,250,.3)', skillColor:'#c4b5fd',
+    btnColor:'#7c3aed', btnText:'#fff', cardRadius:'8px',
+    fontFamily:"'Inter',system-ui,sans-serif", projLayout:'grid',
+    bar:'#a78bfa', dot1:'#7c3aed', dot2:'#6d28d9',
+  },
+  industria: {
+    label:'Indústria', tag:'Manufatura · Supply Chain · OEE', dark:true,
+    bg:'#0e0e0e', surface:'#181818', surface2:'#222', border:'#333',
+    text:'#f0f0f0', muted:'#888', accent:'#f5a623', accent2:'#d4891a',
+    heroGrad:'linear-gradient(160deg,#1a1200,#0e0e0e)',
+    skillBg:'rgba(245,166,35,.1)', skillBorder:'rgba(245,166,35,.3)', skillColor:'#fbbf24',
+    btnColor:'#f5a623', btnText:'#000', cardRadius:'2px',
+    fontFamily:"'Roboto','Segoe UI',sans-serif", projLayout:'list',
+    bar:'#f5a623', dot1:'#d4891a', dot2:'#b45309',
+  },
+  // ── CLAROS ──
+  corporateWhite: {
+    label:'Corporate White', tag:'Finanças · Consultoria · Auditoria', dark:false,
+    bg:'#f8f9fc', surface:'#ffffff', surface2:'#f1f3f8', border:'#e2e6f0',
+    text:'#1a1f36', muted:'#6b7280', accent:'#1e40af', accent2:'#1d3d9f',
+    heroGrad:'linear-gradient(160deg,#e8edf8,#f8f9fc)',
+    skillBg:'rgba(30,64,175,.07)', skillBorder:'rgba(30,64,175,.2)', skillColor:'#1e40af',
+    btnColor:'#1e40af', btnText:'#fff', cardRadius:'8px',
+    fontFamily:"'Segoe UI',Arial,sans-serif", projLayout:'grid',
+    bar:'#1e40af', dot1:'#3b82f6', dot2:'#93c5fd',
+  },
+  slateLight: {
+    label:'Slate Profissional', tag:'RH · Operações · Estratégia', dark:false,
+    bg:'#f4f6f8', surface:'#ffffff', surface2:'#edf0f4', border:'#d1d9e0',
+    text:'#1e293b', muted:'#64748b', accent:'#334155', accent2:'#1e293b',
+    heroGrad:'linear-gradient(160deg,#dde3ec,#f4f6f8)',
+    skillBg:'rgba(51,65,85,.07)', skillBorder:'rgba(51,65,85,.2)', skillColor:'#334155',
+    btnColor:'#334155', btnText:'#fff', cardRadius:'6px',
+    fontFamily:"'Segoe UI',Arial,sans-serif", projLayout:'list',
+    bar:'#475569', dot1:'#64748b', dot2:'#94a3b8',
+  },
+  azulCeu: {
+    label:'Azul Corporativo', tag:'Bancos · Seguros · Financeiro', dark:false,
+    bg:'#eef4ff', surface:'#ffffff', surface2:'#deeaff', border:'#bfcfee',
+    text:'#0f2460', muted:'#4a6095', accent:'#1a56db', accent2:'#1347c2',
+    heroGrad:'linear-gradient(160deg,#c7d9ff,#eef4ff)',
+    skillBg:'rgba(26,86,219,.08)', skillBorder:'rgba(26,86,219,.25)', skillColor:'#1a56db',
+    btnColor:'#1a56db', btnText:'#fff', cardRadius:'8px',
+    fontFamily:"'Calibri','Segoe UI',sans-serif", projLayout:'grid',
+    bar:'#1a56db', dot1:'#3b82f6', dot2:'#93c5fd',
+  },
+  mintSaude: {
+    label:'Verde Saúde', tag:'Hospitais · Clínicas · Farmacêutico', dark:false,
+    bg:'#f0fdf6', surface:'#ffffff', surface2:'#e8f9f0', border:'#a7f3d0',
+    text:'#064e3b', muted:'#059669', accent:'#059669', accent2:'#047857',
+    heroGrad:'linear-gradient(160deg,#d1fae5,#f0fdf6)',
+    skillBg:'rgba(5,150,105,.08)', skillBorder:'rgba(5,150,105,.25)', skillColor:'#047857',
+    btnColor:'#059669', btnText:'#fff', cardRadius:'12px',
+    fontFamily:"'Segoe UI',Arial,sans-serif", projLayout:'grid',
+    bar:'#10b981', dot1:'#34d399', dot2:'#6ee7b7',
+  },
+  roseMarketing: {
+    label:'Rose & Growth', tag:'Marketing · E-commerce · Varejo', dark:false,
+    bg:'#fff5f7', surface:'#ffffff', surface2:'#fce7eb', border:'#fca5a5',
+    text:'#7f1d1d', muted:'#b91c1c', accent:'#e11d48', accent2:'#be123c',
+    heroGrad:'linear-gradient(160deg,#fce7eb,#fff5f7)',
+    skillBg:'rgba(225,29,72,.07)', skillBorder:'rgba(225,29,72,.22)', skillColor:'#be123c',
+    btnColor:'#e11d48', btnText:'#fff', cardRadius:'14px',
+    fontFamily:"'Segoe UI',Arial,sans-serif", projLayout:'grid',
+    bar:'#f43f5e', dot1:'#fb7185', dot2:'#fda4af',
+  },
+  warmOps: {
+    label:'Amber Operações', tag:'Logística · Varejo · Projetos', dark:false,
+    bg:'#fffbeb', surface:'#ffffff', surface2:'#fef3c7', border:'#fcd34d',
+    text:'#451a03', muted:'#92400e', accent:'#d97706', accent2:'#b45309',
+    heroGrad:'linear-gradient(160deg,#fde68a,#fffbeb)',
+    skillBg:'rgba(217,119,6,.08)', skillBorder:'rgba(217,119,6,.25)', skillColor:'#92400e',
+    btnColor:'#d97706', btnText:'#fff', cardRadius:'10px',
+    fontFamily:"'Segoe UI',Arial,sans-serif", projLayout:'grid',
+    bar:'#f59e0b', dot1:'#fbbf24', dot2:'#fcd34d',
+  },
 };
 
 const AREA_COLORS = {'Vendas':'#f59e0b','Financeiro':'#3b82f6','RH / People Analytics':'#8b5cf6','Logística':'#6366f1','Marketing':'#ec4899','Operações':'#f97316','Saúde':'#10b981','Educação':'#06b6d4','Tecnologia':'#a78bfa','Varejo':'#ef4444','Indústria':'#f5a623','Outro':'#6b7280'};
-const SKILLS_DEFAULT=['Power BI Desktop','Power Query (M)','DAX','Modelagem de Dados','Excel Avançado','Power BI Service','SQL Server','MySQL','Python para Dados','R para Dados','Tableau','Google Looker Studio','Azure Data Factory','Azure Synapse','Databricks','Snowflake','ETL / ELT','Data Warehouse','Data Lake','Git & GitHub','Power Automate','SharePoint','Storytelling com Dados','SAP BI'];
+const SKILLS_DEFAULT = ['Power BI Desktop','Power Query (M)','DAX','Modelagem de Dados','Excel Avançado','Power BI Service','SQL Server','MySQL','Python para Dados','R para Dados','Tableau','Google Looker Studio','Azure Data Factory','Azure Synapse','Databricks','Snowflake','ETL / ELT','Data Warehouse','Data Lake','Git & GitHub','Power Automate','SharePoint','Storytelling com Dados','SAP BI','Power Apps'];
 
-let selectedTheme='executivo', photoDataUrl=null, selectedSkills=new Set(), customSkills=[], projects=[], projId=0, generatedHTML='';
-// thumbnails: { [projId]: dataUrl }
-const thumbs = {};
+let selectedTheme = 'corporateWhite';
+let photoDataUrl = null;
+const selectedSkills = new Set();
+let customSkills = [];
+let projects = [];
+let projId = 0;
+let generatedHTML = '';
+// thumbs[projId] = { url: string, src: 'og'|'manual'|null }
+const thumbState = {};
 
-function init(){ renderThemes(); renderSkills(); addProject(); addProject(); addProject(); }
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+function init() {
+  renderThemes();
+  renderSkills();
+  addProject(); addProject(); addProject();
 
-function goTo(idx){
-  document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i===idx));
-  document.querySelectorAll('.step-item').forEach((s,i)=>{s.classList.remove('active','done');if(i<idx)s.classList.add('done');else if(i===idx)s.classList.add('active');});
-  document.querySelectorAll('.step-connector').forEach((c,i)=>c.classList.toggle('done',i<idx));
-  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('btnAddSkill').addEventListener('click', addCustomSkill);
+  document.getElementById('customSkill').addEventListener('keydown', e => { if(e.key==='Enter') addCustomSkill(); });
+  document.getElementById('btnAddProject').addEventListener('click', addProject);
+  document.getElementById('btnGerar').addEventListener('click', gerar);
+  document.getElementById('btnDlPortfolio').addEventListener('click', downloadPortfolio);
+  document.getElementById('btnDlPortfolio2').addEventListener('click', downloadPortfolio);
+  document.getElementById('btnDlGuia').addEventListener('click', downloadGuia);
+  document.getElementById('btnCopyLinkedin').addEventListener('click', () => copyText('linkedinMsg'));
+  document.getElementById('btnCopyRecruiter').addEventListener('click', () => copyText('recruiterMsg'));
 }
 
-function handlePhoto(e){
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload=ev=>{photoDataUrl=ev.target.result;document.getElementById('photoPreview').innerHTML=`<img src="${photoDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}; r.readAsDataURL(f);
+// ═══════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════
+function goTo(idx) {
+  document.querySelectorAll('.page').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.step-item').forEach((s,i) => {
+    s.classList.remove('active','done');
+    if(i < idx) s.classList.add('done');
+    else if(i === idx) s.classList.add('active');
+  });
+  document.querySelectorAll('.step-connector').forEach((c,i) => c.classList.toggle('done', i < idx));
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function renderThemes(){
-  document.getElementById('themeGrid').innerHTML=Object.entries(THEMES).map(([k,t])=>`
-    <div class="theme-card ${k===selectedTheme?'selected':''}" onclick="selectTheme('${k}')">
-      <div class="theme-preview" style="background:${t.previewBg}">
-        <div class="theme-preview-bar" style="background:${t.previewBar}"></div>
+// ═══════════════════════════════════════
+// FOTO
+// ═══════════════════════════════════════
+function handlePhoto(e) {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    photoDataUrl = ev.target.result;
+    document.getElementById('photoPreview').innerHTML = `<img src="${photoDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  };
+  r.readAsDataURL(f);
+}
+
+// ═══════════════════════════════════════
+// TEMAS
+// ═══════════════════════════════════════
+function renderThemes() {
+  document.getElementById('themeGrid').innerHTML = Object.entries(THEMES).map(([k,t]) => {
+    const isSelected = k === selectedTheme;
+    return `<div class="theme-card${isSelected?' selected':''}" data-theme="${k}">
+      <div class="theme-preview" style="background:${t.bg}">
+        <div class="theme-preview-bar" style="background:${t.bar}"></div>
         <div class="theme-preview-body">
-          <div class="theme-preview-title" style="background:${t.previewTitle}"></div>
-          <div class="theme-preview-sub" style="background:${t.previewTitle}"></div>
-          <div class="theme-preview-dots">
-            <div class="theme-preview-dot" style="background:${t.previewDot}"></div>
-            <div class="theme-preview-dot" style="background:${t.previewDot};opacity:.5"></div>
-            <div class="theme-preview-dot" style="background:${t.previewDot};opacity:.3"></div>
+          <div class="theme-preview-name" style="background:${t.text};opacity:0.7"></div>
+          <div class="theme-preview-sub" style="background:${t.muted}"></div>
+          <div class="theme-preview-chips">
+            <div class="theme-preview-chip" style="width:28px;background:${t.dot1}"></div>
+            <div class="theme-preview-chip" style="width:20px;background:${t.dot2}"></div>
+            <div class="theme-preview-chip" style="width:24px;background:${t.muted};opacity:.4"></div>
           </div>
         </div>
       </div>
-      <div class="theme-name" style="background:${t.surface};color:${t.text}">${t.label}<span class="theme-tag" style="color:${t.muted}">${t.tag}</span></div>
-    </div>`).join('');
+      <div class="theme-name" style="background:${t.surface};color:${t.text}">
+        ${t.dark ? '<span style="font-size:9px;opacity:.5;margin-right:4px">●</span>' : '<span style="font-size:9px;opacity:.5;margin-right:4px">○</span>'}${t.label}
+        <span class="theme-tag" style="color:${t.muted}">${t.tag}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectedTheme = card.dataset.theme;
+      renderThemes();
+      showToast(`Tema "${THEMES[selectedTheme].label}" selecionado!`);
+    });
+  });
 }
-function selectTheme(k){ selectedTheme=k; renderThemes(); showToast(`Tema "${THEMES[k].label}" selecionado!`); }
 
-function renderSkills(){
-  document.getElementById('skillsWrap').innerHTML=[...SKILLS_DEFAULT,...customSkills].map(s=>
-    `<div class="skill-tag ${selectedSkills.has(s)?'selected':''}" onclick="toggleSkill('${s.replace(/'/g,"\\'")}'">${s}</div>`).join('');
+// ═══════════════════════════════════════
+// SKILLS — usa data-skill, sem onclick inline
+// ═══════════════════════════════════════
+function renderSkills() {
+  const wrap = document.getElementById('skillsWrap');
+  const all = [...SKILLS_DEFAULT, ...customSkills];
+  wrap.innerHTML = all.map(s =>
+    `<span class="skill-chip${selectedSkills.has(s)?' on':''}" data-skill="${s.replace(/"/g,'&quot;')}">${s}</span>`
+  ).join('');
+  wrap.querySelectorAll('.skill-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const s = chip.dataset.skill;
+      selectedSkills.has(s) ? selectedSkills.delete(s) : selectedSkills.add(s);
+      chip.classList.toggle('on', selectedSkills.has(s));
+    });
+  });
 }
-function toggleSkill(s){ selectedSkills.has(s)?selectedSkills.delete(s):selectedSkills.add(s); renderSkills(); }
-function addCustomSkill(){ const i=document.getElementById('customSkill'),v=i.value.trim(); if(!v)return; customSkills.push(v);selectedSkills.add(v);i.value=''; renderSkills(); }
 
-// ══ PROJETOS ══
-function addProject(){ const id=projId++; projects.push(id); renderProjects(); }
-function removeProject(id){ projects=projects.filter(p=>p!==id); delete thumbs[id]; renderProjects(); }
+function addCustomSkill() {
+  const inp = document.getElementById('customSkill');
+  const v = inp.value.trim();
+  if(!v) return;
+  customSkills.push(v);
+  selectedSkills.add(v);
+  inp.value = '';
+  renderSkills();
+  showToast(`"${v}" adicionada!`);
+}
 
-function renderProjects(){
-  document.getElementById('projectsContainer').innerHTML=projects.map((id,idx)=>{
-    const hasThumb=!!thumbs[id];
+// ═══════════════════════════════════════
+// PROJETOS
+// ═══════════════════════════════════════
+function addProject() {
+  const id = projId++;
+  projects.push(id);
+  thumbState[id] = { url: null, status: 'none' };
+  renderProjects();
+}
+
+function removeProject(id) {
+  projects = projects.filter(p => p !== id);
+  delete thumbState[id];
+  renderProjects();
+}
+
+function renderProjects() {
+  const cont = document.getElementById('projectsContainer');
+  cont.innerHTML = projects.map((id, idx) => {
+    const ts = thumbState[id] || { url:null, status:'none' };
+    const badgeHtml = ts.status === 'ok'
+      ? `<span class="thumb-badge ok">✓ Miniatura carregada</span>`
+      : ts.status === 'loading'
+      ? `<span class="thumb-badge loading">⏳ Carregando…</span>`
+      : `<span class="thumb-badge none">Sem miniatura</span>`;
+
+    const thumbInner = ts.status === 'loading'
+      ? `<div class="thumb-spinner"><div class="spinner-ring"></div><span>Buscando preview…</span></div>`
+      : ts.url
+      ? `<img class="thumb-og" src="${ts.url}" onerror="this.parentElement.innerHTML='<div class=thumb-error>Imagem não disponível<br>Cole uma URL manualmente</div>'">`
+      : `<div class="thumb-ph"><span class="thumb-ph-icon">🔗</span>Cole o link e clique<br>"Carregar miniatura"</div>`;
+
     return `<div class="project-card" id="proj_${id}">
       <div class="proj-header">
         <div class="project-num">PROJETO ${idx+1}</div>
-        ${projects.length>1?`<button class="btn-remove" onclick="removeProject(${id})">✕ Remover</button>`:''}
+        ${projects.length > 1 ? `<button class="btn-remove" data-removeid="${id}">✕ Remover</button>` : ''}
       </div>
       <div class="proj-body">
-        <div class="thumb-row">
-          <!-- MINIATURA -->
-          <div class="thumb-box" id="thumbBox_${id}" onclick="triggerThumb(${id})">
-            ${hasThumb
-              ? `<img src="${thumbs[id]}" id="thumbImg_${id}">`
-              : `<div class="thumb-placeholder"><span>🖼️</span>Clique para adicionar<br>print do dashboard</div>`}
-            <div class="thumb-overlay">
-              <button class="thumb-overlay-btn" onclick="event.stopPropagation();triggerThumb(${id})">📎 ${hasThumb?'Trocar':'Adicionar'} print</button>
-              ${hasThumb?`<button class="thumb-overlay-del" onclick="event.stopPropagation();removeThumb(${id})">🗑 Remover</button>`:''}
-            </div>
-          </div>
-          <input type="file" id="thumbInput_${id}" accept="image/*" style="display:none" onchange="handleThumb(event,${id})">
-          <!-- CAMPOS -->
+        <div class="thumb-area">
+          <div class="thumb-box" id="thumbBox_${id}">${thumbInner}</div>
           <div class="thumb-fields">
             <div class="field"><label>Nome do Projeto *</label><input id="p${id}_nome" type="text" placeholder="Ex: Dashboard de Vendas Regional"></div>
             <div class="field"><label>Área</label>
@@ -423,176 +586,281 @@ function renderProjects(){
                 <option>Varejo</option><option>Indústria</option><option>Outro</option>
               </select>
             </div>
-            <div class="thumb-status ${hasThumb?'ok':'none'}">
-              ${hasThumb?'✓ Miniatura adicionada':'Sem miniatura — clique na imagem'}
+            <div class="thumb-status-row">
+              ${badgeHtml}
+              ${ts.url ? `<button class="btn-fetch" data-clearid="${id}">✕ Remover</button>` : ''}
             </div>
           </div>
         </div>
         <div class="form-grid">
-          <div class="field form-full"><label>Descrição breve *</label><textarea id="p${id}_desc" rows="2" placeholder="Ex: Análise de performance de vendas por região com KPIs de Receita, Ticket Médio e Meta x Realizado."></textarea></div>
-          <div class="field form-full"><label>Técnicas usadas (separadas por vírgula)</label><input id="p${id}_tech" type="text" placeholder="Ex: Power Query, DAX, CALCULATE, Modelagem Estrela"></div>
-          <div class="field"><label>Link Power BI Service ou GitHub</label><input id="p${id}_link" type="url" placeholder="https://app.powerbi.com/..."></div>
-          <div class="field"><label>Insight principal</label><input id="p${id}_insight" type="text" placeholder="Ex: Região Sul superou a meta em 23% no Q4"></div>
+          <div class="field form-full" style="position:relative">
+            <label>Link do projeto (Power BI, GitHub, etc.)</label>
+            <div style="display:flex;gap:8px">
+              <input id="p${id}_link" type="url" placeholder="https://app.powerbi.com/..." style="flex:1" value="${(window['_plink_'+id])||''}">
+              <button class="btn-fetch" data-fetchid="${id}">🔍 Carregar miniatura</button>
+            </div>
+            <div style="margin-top:6px;font-size:11px;color:var(--muted)">Ou cole a URL direta de uma imagem:</div>
+            <input id="p${id}_imgurl" type="url" placeholder="https://i.imgur.com/suaimagem.png (opcional)" style="margin-top:4px" value="${(window['_pimgurl_'+id])||''}">
+          </div>
+          <div class="field form-full"><label>Descrição breve *</label><textarea id="p${id}_desc" rows="2" placeholder="Ex: Análise de performance de vendas por região com KPIs de Receita, Ticket Médio e Meta x Realizado.">${(window['_pdesc_'+id])||''}</textarea></div>
+          <div class="field form-full"><label>Técnicas usadas (separadas por vírgula)</label><input id="p${id}_tech" type="text" placeholder="Ex: Power Query, DAX, CALCULATE, Modelagem Estrela" value="${(window['_ptech_'+id])||''}"></div>
+          <div class="field form-full"><label>Insight principal</label><input id="p${id}_insight" type="text" placeholder="Ex: Região Sul superou a meta em 23% no Q4" value="${(window['_pinsight_'+id])||''}"></div>
         </div>
       </div>
     </div>`;
   }).join('');
+
+  // bind events — sem onclick inline
+  cont.querySelectorAll('[data-removeid]').forEach(btn => {
+    btn.addEventListener('click', () => removeProject(parseInt(btn.dataset.removeid)));
+  });
+  cont.querySelectorAll('[data-fetchid]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = parseInt(btn.dataset.fetchid);
+      saveFieldCache(id);
+      fetchThumb(id);
+    });
+  });
+  cont.querySelectorAll('[data-clearid]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = parseInt(btn.dataset.clearid);
+      saveFieldCache(id);
+      thumbState[id] = { url: null, status: 'none' };
+      renderProjects();
+    });
+  });
+  // save on input change (preserve values across re-render)
+  projects.forEach(id => {
+    ['_link','_imgurl','_desc','_tech','_insight'].forEach(f => {
+      const el = document.getElementById(`p${id}${f}`);
+      if(el) el.addEventListener('input', () => { window[`_p${f.slice(1)}_${id}`] = el.value; });
+    });
+  });
 }
 
-function triggerThumb(id){ document.getElementById(`thumbInput_${id}`)?.click(); }
-
-function handleThumb(e, id){
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload=ev=>{ thumbs[id]=ev.target.result; renderProjects(); showToast('✓ Miniatura adicionada!'); }; r.readAsDataURL(f);
+function saveFieldCache(id) {
+  ['link','imgurl','desc','tech','insight'].forEach(f => {
+    const el = document.getElementById(`p${id}_${f}`);
+    if(el) window[`_p${f}_${id}`] = el.value;
+  });
+  const ar = document.getElementById(`p${id}_area`);
+  if(ar) window[`_parea_${id}`] = ar.value;
 }
 
-function removeThumb(id){ delete thumbs[id]; renderProjects(); }
+// ═══════════════════════════════════════
+// FETCH MINIATURA VIA ANTHROPIC API
+// ═══════════════════════════════════════
+async function fetchThumb(id) {
+  const linkEl = document.getElementById(`p${id}_link`);
+  const imgUrlEl = document.getElementById(`p${id}_imgurl`);
+  const manualUrl = imgUrlEl?.value.trim();
 
-// ══ GERAR ══
-function gerar(){
-  const get=id=>document.getElementById(id)?.value.trim()||'';
-  const nome=get('nome')||'Seu Nome', cargo=get('cargo')||'Analista de Dados Power BI';
-  const cidade=get('cidade'),email=get('email'),whatsapp=get('whatsapp');
-  const sobre=get('sobre'),linkedin=get('linkedin'),github=get('github');
-  const curso=get('curso'),anoCurso=get('anoCurso');
-  const certs=get('certs')?get('certs').split('\n').filter(c=>c.trim()):[];
-  const skills=[...selectedSkills];
-  const projData=projects.map(id=>({
-    id,
-    nome:get(`p${id}_nome`),area:document.getElementById(`p${id}_area`)?.value||'',
-    desc:get(`p${id}_desc`),tech:get(`p${id}_tech`),
-    link:get(`p${id}_link`),insight:get(`p${id}_insight`),
-    thumb:thumbs[id]||null
-  })).filter(p=>p.nome);
+  // Se tem URL de imagem manual, usa ela direto
+  if(manualUrl) {
+    thumbState[id] = { url: manualUrl, status: 'ok' };
+    renderProjects();
+    showToast('✓ Imagem carregada!');
+    return;
+  }
 
-  const t=THEMES[selectedTheme];
-  generatedHTML=buildHTML({nome,cargo,cidade,email,whatsapp,sobre,linkedin,github,curso,anoCurso,certs,skills,projData,photoSrc:photoDataUrl,theme:t});
+  const link = linkEl?.value.trim();
+  if(!link) { showToast('⚠ Cole o link do projeto primeiro!'); return; }
 
-  document.getElementById('linkedinMsg').textContent=
+  saveFieldCache(id);
+  thumbState[id] = { url: null, status: 'loading' };
+  renderProjects();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 400,
+        system: 'You are a metadata extractor. The user gives you a URL. You must fetch the page and find the og:image or twitter:image meta tag, or the first meaningful image URL on the page. Respond with ONLY a valid image URL (starting with http). If you cannot find any image, respond with exactly: NONE. Do not explain anything.',
+        messages: [{ role: 'user', content: `Find the preview image (og:image) for this URL: ${link}` }],
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+      })
+    });
+
+    const data = await response.json();
+    let imgUrl = null;
+
+    for(const block of (data.content || [])) {
+      if(block.type === 'text') {
+        const t = block.text.trim();
+        if(t !== 'NONE' && (t.startsWith('http://') || t.startsWith('https://'))) {
+          imgUrl = t;
+          break;
+        }
+      }
+    }
+
+    if(imgUrl) {
+      thumbState[id] = { url: imgUrl, status: 'ok' };
+      showToast('✓ Miniatura carregada!');
+    } else {
+      thumbState[id] = { url: null, status: 'none' };
+      showToast('⚠ Nenhuma imagem encontrada. Cole a URL da imagem manualmente.');
+    }
+  } catch(err) {
+    thumbState[id] = { url: null, status: 'none' };
+    showToast('⚠ Erro ao buscar. Cole a URL da imagem manualmente.');
+  }
+
+  renderProjects();
+}
+
+// ═══════════════════════════════════════
+// GERAR
+// ═══════════════════════════════════════
+function gerar() {
+  projects.forEach(id => saveFieldCache(id));
+
+  const get = id => document.getElementById(id)?.value.trim() || '';
+  const nome = get('nome') || 'Seu Nome';
+  const cargo = get('cargo') || 'Analista de Dados Power BI';
+  const cidade = get('cidade'), email = get('email'), whatsapp = get('whatsapp');
+  const sobre = get('sobre'), linkedin = get('linkedin'), github = get('github');
+  const curso = get('curso'), anoCurso = get('anoCurso');
+  const certs = get('certs') ? get('certs').split('\n').filter(c => c.trim()) : [];
+  const skills = [...selectedSkills];
+
+  const projData = projects.map(id => ({
+    nome: window[`_pnome_${id}`] || get(`p${id}_nome`),
+    area: window[`_parea_${id}`] || document.getElementById(`p${id}_area`)?.value || '',
+    desc: window[`_pdesc_${id}`] || get(`p${id}_desc`),
+    tech: window[`_ptech_${id}`] || get(`p${id}_tech`),
+    link: window[`_plink_${id}`] || get(`p${id}_link`),
+    imgurl: window[`_pimgurl_${id}`] || get(`p${id}_imgurl`),
+    insight: window[`_pinsight_${id}`] || get(`p${id}_insight`),
+    thumb: thumbState[id]?.url || (window[`_pimgurl_${id}`]) || null,
+  })).filter(p => p.nome);
+
+  const t = THEMES[selectedTheme];
+  generatedHTML = buildHTML({ nome,cargo,cidade,email,whatsapp,sobre,linkedin,github,curso,anoCurso,certs,skills,projData,photoSrc:photoDataUrl,theme:t });
+
+  document.getElementById('linkedinMsg').textContent =
 `🚀 Finalizei meu portfólio de projetos Power BI!
 
-Ao longo da minha formação no SENAI, desenvolvi ${projData.length} projeto${projData.length>1?'s':''} práticos que transformam dados em decisões reais.
+Ao longo da minha formação no SENAI, desenvolvi ${projData.length} projeto${projData.length>1?'s':''} práticos.
 
-📊 No portfólio você vai encontrar:
+📊 No portfólio:
 ${projData.map(p=>`• ${p.nome} (${p.area})`).join('\n')}
 
 🛠️ Ferramentas: ${skills.slice(0,5).join(', ')}${skills.length>5?' e mais...':''}
 
-Acesse e veja os dashboards interativos 👇
+Acesse os dashboards interativos 👇
 🔗 https://seuusuario.github.io
 
-#PowerBI #AnaliseDeDados #DataAnalytics #BusinessIntelligence #SENAI #PortfolioPowerBI`;
+#PowerBI #AnaliseDeDados #DataAnalytics #SENAI`;
 
-  document.getElementById('recruiterMsg').textContent=
-`Olá, [Nome do Recrutador]!
+  document.getElementById('recruiterMsg').textContent =
+`Olá, [Nome]!
 
-Vi a vaga de [Cargo] na [Nome da Empresa] e acredito que meu perfil se encaixa bem.
+Vi a vaga de [Cargo] na [Empresa] e acredito que meu perfil se encaixa.
 
-Tenho formação em Análise de Dados pelo SENAI, com foco em Power BI. Desenvolvi projetos como ${projData[0]?.nome||'Dashboard de Vendas'}.
+Tenho formação em Análise de Dados pelo SENAI, com foco em Power BI. Desenvolvi projetos como "${projData[0]?.nome||'Dashboard de Vendas'}".
 
-Meu portfólio: https://seuusuario.github.io
-
-Estou disponível para conversar!
+Portfólio: https://seuusuario.github.io
 
 Att, ${nome}
 ${email}${whatsapp?'\n'+whatsapp:''}`;
 
-  goTo(4); showToast('✓ Portfólio gerado com sucesso!');
+  goTo(4);
+  showToast('✓ Portfólio gerado!');
 }
 
-// ══ BUILD HTML ══
-function buildHTML({nome,cargo,cidade,email,whatsapp,sobre,linkedin,github,curso,anoCurso,certs,skills,projData,photoSrc,theme:t}){
-  const photoEl=photoSrc
-    ?`<img src="${photoSrc}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:3px solid ${t.accent};display:block;margin:0 auto 20px">`
-    :`<div style="width:130px;height:130px;border-radius:50%;background:${t.surface2};border:3px solid ${t.accent};display:flex;align-items:center;justify-content:center;font-size:52px;margin:0 auto 20px">🧑</div>`;
+// ═══════════════════════════════════════
+// BUILD HTML DO PORTFÓLIO
+// ═══════════════════════════════════════
+function buildHTML({nome,cargo,cidade,email,whatsapp,sobre,linkedin,github,curso,anoCurso,certs,skills,projData,photoSrc,theme:t}) {
+  const photoEl = photoSrc
+    ? `<img src="${photoSrc}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:3px solid ${t.accent};display:block;margin:0 auto 20px">`
+    : `<div style="width:130px;height:130px;border-radius:50%;background:${t.surface2};border:3px solid ${t.accent};display:flex;align-items:center;justify-content:center;font-size:52px;margin:0 auto 20px">🧑</div>`;
 
-  const heroBg=(()=>{
-    if(t.headerStyle==='stripe') return `background:${t.heroGrad};border-left:5px solid ${t.accent}`;
-    if(t.headerStyle==='glow') return `background:${t.heroGrad};box-shadow:inset 0 0 120px rgba(124,58,237,.15)`;
-    if(t.headerStyle==='industrial') return `background:${t.heroGrad};border-top:4px solid ${t.accent}`;
-    if(t.headerStyle==='bold') return `background:${t.heroGrad};border-bottom:4px solid ${t.accent}`;
-    if(t.headerStyle==='clean') return `background:${t.heroGrad};border-bottom:1px solid ${t.border}`;
-    return `background:${t.heroGrad}`;
+  const heroExtra = (() => {
+    if(!t.dark) return `border-bottom:2px solid ${t.border}`;
+    return '';
   })();
 
-  const skillsEl=skills.map(s=>`<span style="background:${t.skillBg};border:1px solid ${t.skillBorder};color:${t.skillColor};padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap">${s}</span>`).join(' ');
-  const certsEl=certs.length?`<div style="margin-top:24px"><h3 style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:12px">Certificações</h3>${certs.map(c=>`<div style="padding:8px 0;border-bottom:1px solid ${t.border};font-size:13px;color:${t.text}">🏅 ${c}</div>`).join('')}</div>`:'';
+  const skillsEl = skills.map(s =>
+    `<span style="background:${t.skillBg};border:1px solid ${t.skillBorder};color:${t.skillColor};padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap">${s}</span>`
+  ).join(' ');
 
-  // ── PROJECT CARDS com miniatura ──
-  const projsEl=projData.map((p,i)=>{
-    const pColor=AREA_COLORS[p.area]||t.accent;
-    const techs=p.tech?p.tech.split(',').map(s=>s.trim()).filter(Boolean):[];
-    const thumbEl=p.thumb
-      ? `<div style="position:relative;overflow:hidden;border-radius:${t.cardRadius} ${t.cardRadius} 0 0;height:180px;background:${t.surface2}">
-           <img src="${p.thumb}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-           <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,${t.bg}ee 100%)"></div>
-           <div style="position:absolute;top:10px;left:12px">
-             <span style="background:${pColor};color:#000;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding:3px 9px;border-radius:20px">${p.area}</span>
-           </div>
-           ${p.link?`<a href="${p.link}" target="_blank" style="position:absolute;bottom:12px;right:12px;background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:11px;padding:7px 14px;border-radius:${t.cardRadius};text-decoration:none;opacity:0;transition:opacity .3s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">Ver Projeto →</a>`:''}
+  const certsEl = certs.length ? `<div style="margin-top:20px">
+    <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:12px">Certificações</h3>
+    ${certs.map(c=>`<div style="padding:8px 0;border-bottom:1px solid ${t.border};font-size:13px;color:${t.text}">🏅 ${c}</div>`).join('')}
+  </div>` : '';
+
+  const projCards = projData.map((p,i) => {
+    const pc = AREA_COLORS[p.area] || t.accent;
+    const techs = p.tech ? p.tech.split(',').map(s=>s.trim()).filter(Boolean) : [];
+    const thumbFinalUrl = p.thumb || p.imgurl || null;
+
+    const thumbHtml = thumbFinalUrl
+      ? `<div style="position:relative;height:190px;overflow:hidden;border-radius:${t.cardRadius} ${t.cardRadius} 0 0;background:${t.surface2}">
+           <img src="${thumbFinalUrl}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onerror="this.parentElement.style.display='none'">
+           <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,${t.bg}dd 100%);pointer-events:none"></div>
+           <span style="position:absolute;top:10px;left:12px;background:${pc};color:#fff;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;padding:4px 10px;border-radius:20px">${p.area}</span>
+           ${p.link ? `<a href="${p.link}" target="_blank" style="position:absolute;bottom:12px;right:12px;background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:11px;padding:7px 14px;border-radius:${t.cardRadius};text-decoration:none;transition:opacity .2s;opacity:0" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">Ver Projeto →</a>` : ''}
          </div>`
-      : `<div style="height:6px;background:${pColor};border-radius:${t.cardRadius} ${t.cardRadius} 0 0"></div>`;
+      : `<div style="height:5px;background:${pc};border-radius:${t.cardRadius} ${t.cardRadius} 0 0"></div>`;
 
-    const cardInner=(()=>{
-      if(t.projLayout==='list'){
-        return `<div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};margin-bottom:16px;overflow:hidden">
-          ${thumbEl}
-          <div style="padding:20px 24px;border-left:4px solid ${pColor}">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
-              <div style="flex:1;min-width:200px">
-                <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${pColor};display:block;margin-bottom:6px">${p.area} · Projeto ${String(i+1).padStart(2,'0')}</span>
-                <h3 style="font-size:17px;font-weight:700;color:${t.text};margin-bottom:8px">${p.nome}</h3>
-                <p style="font-size:13px;color:${t.muted};line-height:1.7;margin-bottom:12px">${p.desc}</p>
-                ${p.insight?`<div style="font-size:12px;color:${t.text};padding:8px 12px;background:${t.surface2};border-radius:4px;border-left:3px solid ${pColor};margin-bottom:12px"><strong style="color:${pColor}">Insight:</strong> ${p.insight}</div>`:''}
-                ${techs.length?`<div style="display:flex;flex-wrap:wrap;gap:6px">${techs.map(tc=>`<span style="background:${t.surface2};border:1px solid ${t.border};color:${t.muted};padding:3px 10px;border-radius:4px;font-size:11px;font-family:monospace">${tc}</span>`).join('')}</div>`:''}
-              </div>
-              ${p.link?`<a href="${p.link}" target="_blank" style="background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:12px;padding:10px 18px;border-radius:${t.cardRadius};text-decoration:none;white-space:nowrap;align-self:flex-start">Ver →</a>`:''}
-            </div>
+    if(t.projLayout === 'list') {
+      return `<div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};margin-bottom:16px;overflow:hidden">
+        ${thumbHtml}
+        <div style="padding:20px 24px;${!thumbFinalUrl?'border-left:4px solid '+pc:''}">
+          ${!thumbFinalUrl ? `<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${pc};display:block;margin-bottom:6px">${p.area} · Projeto ${String(i+1).padStart(2,'0')}</span>` : ''}
+          <h3 style="font-size:17px;font-weight:700;color:${t.text};margin-bottom:8px">${p.nome}</h3>
+          <p style="font-size:13px;color:${t.muted};line-height:1.7;margin-bottom:12px">${p.desc}</p>
+          ${p.insight?`<div style="font-size:12px;padding:8px 12px;background:${t.surface2};border-radius:4px;border-left:3px solid ${pc};margin-bottom:12px;color:${t.text}"><strong style="color:${pc}">Insight:</strong> ${p.insight}</div>`:''}
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+            ${techs.length?`<div style="display:flex;flex-wrap:wrap;gap:5px">${techs.map(tc=>`<span style="background:${t.surface2};border:1px solid ${t.border};color:${t.muted};padding:2px 9px;border-radius:4px;font-size:11px;font-family:monospace">${tc}</span>`).join('')}</div>`:'<div></div>'}
+            ${p.link?`<a href="${p.link}" target="_blank" style="background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:12px;padding:9px 18px;border-radius:${t.cardRadius};text-decoration:none;white-space:nowrap">Ver Projeto →</a>`:''}
           </div>
-        </div>`;
-      }
-      return `<div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};overflow:hidden;position:relative">
-        ${thumbEl}
-        <div style="padding:20px">
-          <h3 style="font-size:16px;font-weight:700;color:${t.text};margin-bottom:8px;line-height:1.3">${p.nome}</h3>
-          <p style="font-size:13px;color:${t.muted};line-height:1.6;margin-bottom:12px">${p.desc}</p>
-          ${p.insight?`<div style="font-size:12px;color:${t.text};padding:8px 12px;background:${t.surface2};border-radius:${t.cardRadius};margin-bottom:12px;border-left:3px solid ${pColor}"><strong style="color:${pColor}">💡</strong> ${p.insight}</div>`:''}
-          ${techs.length?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px">${techs.map(tc=>`<span style="background:${t.surface2};border:1px solid ${t.border};color:${t.muted};padding:2px 9px;border-radius:4px;font-size:11px;font-family:monospace">${tc}</span>`).join('')}</div>`:''}
-          ${p.link?`<a href="${p.link}" target="_blank" style="display:inline-block;background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:12px;padding:9px 18px;border-radius:${t.cardRadius};text-decoration:none">Ver Projeto →</a>`:''}
         </div>
       </div>`;
-    })();
-    return cardInner;
+    }
+    return `<div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};overflow:hidden">
+      ${thumbHtml}
+      <div style="padding:20px">
+        <h3 style="font-size:16px;font-weight:700;color:${t.text};margin-bottom:8px;line-height:1.3">${p.nome}</h3>
+        <p style="font-size:13px;color:${t.muted};line-height:1.6;margin-bottom:10px">${p.desc}</p>
+        ${p.insight?`<div style="font-size:12px;padding:8px 12px;background:${t.surface2};border-radius:${t.cardRadius};margin-bottom:12px;border-left:3px solid ${pc};color:${t.text}"><strong style="color:${pc}">💡</strong> ${p.insight}</div>`:''}
+        ${techs.length?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">${techs.map(tc=>`<span style="background:${t.surface2};border:1px solid ${t.border};color:${t.muted};padding:2px 9px;border-radius:4px;font-size:11px;font-family:monospace">${tc}</span>`).join('')}</div>`:''}
+        ${p.link?`<a href="${p.link}" target="_blank" style="display:inline-block;background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:12px;padding:9px 18px;border-radius:${t.cardRadius};text-decoration:none">Ver Projeto →</a>`:''}
+      </div>
+    </div>`;
   }).join('');
 
-  const contacts=[];
+  const contacts = [];
   if(email) contacts.push(`<a href="mailto:${email}" style="color:${t.accent};text-decoration:none;font-size:13px">📧 ${email}</a>`);
   if(whatsapp) contacts.push(`<a href="https://wa.me/55${whatsapp.replace(/\D/g,'')}" target="_blank" style="color:${t.accent};text-decoration:none;font-size:13px">💬 ${whatsapp}</a>`);
   if(linkedin) contacts.push(`<a href="${linkedin}" target="_blank" style="color:${t.accent};text-decoration:none;font-size:13px">🔗 LinkedIn</a>`);
   if(github) contacts.push(`<a href="${github}" target="_blank" style="color:${t.accent};text-decoration:none;font-size:13px">🐙 GitHub</a>`);
 
-  const projGrid=t.projLayout==='grid'
-    ?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px">${projsEl}</div>`
-    :`<div>${projsEl}</div>`;
+  const projGrid = t.projLayout === 'grid'
+    ? `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px">${projCards}</div>`
+    : `<div>${projCards}</div>`;
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Portfólio — ${nome}</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:${t.fontFamily};background:${t.bg};color:${t.text};min-height:100vh}
-  a{color:inherit;transition:opacity .2s}a:hover{opacity:.8}
-  section{max-width:920px;margin:0 auto;padding:0 28px}
-  @media(max-width:600px){section{padding:0 16px}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:${t.fontFamily};background:${t.bg};color:${t.text};min-height:100vh}
+a{color:inherit;transition:opacity .2s}a:hover{opacity:.8}
+section{max-width:940px;margin:0 auto;padding:0 28px}
+@media(max-width:600px){section{padding:0 16px}}
 </style>
 </head>
 <body>
-<div style="${heroBg};padding:64px 28px">
+<div style="background:${t.heroGrad};padding:64px 28px;${heroExtra}">
   <section>
-    <div style="display:flex;align-items:center;gap:40px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:44px;flex-wrap:wrap">
       <div>${photoEl}</div>
       <div style="flex:1;min-width:260px">
         <h1 style="font-size:38px;font-weight:800;color:${t.text};margin-bottom:6px;line-height:1.2">${nome}</h1>
@@ -604,39 +872,55 @@ function buildHTML({nome,cargo,cidade,email,whatsapp,sobre,linkedin,github,curso
     </div>
   </section>
 </div>
-${skills.length?`<div style="padding:48px 28px;border-bottom:1px solid ${t.border};background:${t.surface}"><section><h2 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:16px">Habilidades Técnicas</h2><div style="display:flex;flex-wrap:wrap;gap:8px">${skillsEl}</div></section></div>`:''}
-${curso||certs.length?`<div style="padding:48px 28px;border-bottom:1px solid ${t.border};background:${t.bg}"><section><h2 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:16px">Formação</h2>${curso?`<div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};padding:18px 22px"><div style="font-weight:700;font-size:15px;color:${t.text};margin-bottom:4px">${curso}</div>${anoCurso?`<div style="font-size:12px;color:${t.muted}">Conclusão: ${anoCurso}</div>`:''}</div>`:''}${certsEl}</section></div>`:''}
-${projsEl?`<div style="padding:48px 28px 80px;background:${t.bg}"><section><h2 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:22px">Projetos</h2>${projGrid}</section></div>`:''}
-<div style="background:${t.surface};border-top:1px solid ${t.border};padding:20px;text-align:center"><div style="font-size:12px;color:${t.muted}">Portfólio gerado com o Gerador de Portfólio Power BI · SENAI</div></div>
+${skills.length?`<div style="padding:44px 28px;border-bottom:1px solid ${t.border};background:${t.surface}"><section><h2 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:16px">Habilidades Técnicas</h2><div style="display:flex;flex-wrap:wrap;gap:8px">${skillsEl}</div></section></div>`:''}
+${curso||certs.length?`<div style="padding:44px 28px;border-bottom:1px solid ${t.border};background:${t.bg}"><section><h2 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:16px">Formação</h2>${curso?`<div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};padding:16px 20px"><div style="font-weight:700;font-size:15px;color:${t.text};margin-bottom:3px">${curso}</div>${anoCurso?`<div style="font-size:12px;color:${t.muted}">Conclusão: ${anoCurso}</div>`:''}</div>`:''}${certsEl}</section></div>`:''}
+${projCards?`<div style="padding:44px 28px 80px;background:${t.bg}"><section><h2 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${t.accent};font-weight:700;margin-bottom:22px">Projetos</h2>${projGrid}</section></div>`:''}
+<div style="background:${t.surface};border-top:1px solid ${t.border};padding:18px;text-align:center"><div style="font-size:12px;color:${t.muted}">Portfólio gerado com o Gerador de Portfólio Power BI · SENAI</div></div>
 </body>
 </html>`;
 }
 
-// ══ DOWNLOADS ══
-function downloadPortfolio(){ if(!generatedHTML){showToast('⚠ Gere o portfólio primeiro!');return;} download('index.html',generatedHTML); }
-function downloadGuia(){ download('Guia_Publicacao_Portfolio.html',buildGuiaHTML(document.getElementById('nome').value.trim()||'Aluno')); }
-function buildGuiaHTML(nome){return`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Guia</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e8eaf0;padding:32px 24px;max-width:760px;margin:0 auto}h1{font-size:28px;font-weight:800;margin-bottom:6px}.sub{color:#8891aa;font-size:14px;margin-bottom:40px}.b{background:#1a1d27;border:1px solid #2e3247;border-radius:14px;padding:24px;margin-bottom:20px}.bt{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:18px;display:flex;align-items:center;gap:8px}.s{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}.n{width:28px;height:28px;background:#f2a900;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#000;flex-shrink:0}.s h4{font-size:14px;font-weight:700;margin-bottom:4px}.s p{font-size:13px;color:#8891aa;line-height:1.6}code{background:#22263a;border:1px solid #2e3247;padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;color:#f2a900}.msg{background:#22263a;border:1px solid #2e3247;border-radius:8px;padding:16px;font-size:13px;line-height:1.8;white-space:pre-wrap;margin-top:8px}.foot{text-align:center;color:#8891aa;font-size:12px;margin-top:40px;padding-top:20px;border-top:1px solid #2e3247}</style></head><body>
+// ═══════════════════════════════════════
+// DOWNLOADS
+// ═══════════════════════════════════════
+function downloadPortfolio() {
+  if(!generatedHTML) { showToast('⚠ Gere o portfólio primeiro!'); return; }
+  dl('index.html', generatedHTML);
+}
+function downloadGuia() {
+  const nome = document.getElementById('nome').value.trim() || 'Aluno';
+  dl('Guia_Publicacao.html', `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Guia</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e8eaf0;padding:32px 24px;max-width:760px;margin:0 auto}h1{font-size:26px;font-weight:800;margin-bottom:4px}.sub{color:#8891aa;font-size:13px;margin-bottom:36px}.b{background:#1a1d27;border:1px solid #2e3247;border-radius:12px;padding:22px;margin-bottom:16px}.bt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px}.s{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}.n{width:26px;height:26px;background:#f2a900;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#000;flex-shrink:0}.s h4{font-size:13px;font-weight:700;margin-bottom:3px}.s p{font-size:12px;color:#8891aa;line-height:1.6}code{background:#22263a;padding:2px 7px;border-radius:4px;font-family:monospace;font-size:11px;color:#f2a900}.foot{text-align:center;color:#8891aa;font-size:11px;margin-top:36px;padding-top:16px;border-top:1px solid #2e3247}</style></head><body>
 <h1>📋 Guia de Publicação</h1><div class="sub">Portfólio Power BI — ${nome} · SENAI</div>
-<div class="b"><div class="bt" style="color:#22d3a0">🐙 PARTE 1 — GitHub Pages</div>
-<div class="s"><div class="n">1</div><div><h4>Criar conta</h4><p>Acesse <strong>github.com</strong> e crie conta gratuita.</p></div></div>
-<div class="s"><div class="n">2</div><div><h4>Repositório especial</h4><p><strong>New</strong> → nome: <code>seuusuario.github.io</code> → <strong>Public</strong> → <strong>Create repository</strong></p></div></div>
-<div class="s"><div class="n">3</div><div><h4>Upload do index.html</h4><p><strong>Add file → Upload files</strong> → arraste o <code>index.html</code> → "Portfólio inicial" → <strong>Commit changes</strong></p></div></div>
-<div class="s"><div class="n">4</div><div><h4>Acessar</h4><p>Em até 2 min: <code>https://seuusuario.github.io</code> 🎉</p></div></div>
-<div class="s"><div class="n">5</div><div><h4>Atualizar</h4><p>Delete o antigo e suba o novo <code>index.html</code>.</p></div></div></div>
-<div class="b"><div class="bt" style="color:#4f8ef7">💼 PARTE 2 — LinkedIn</div>
-<div class="s"><div class="n">1</div><div><h4>Link no perfil</h4><p><strong>Editar perfil → Websites</strong> → <code>https://seuusuario.github.io</code></p></div></div>
-<div class="s"><div class="n">2</div><div><h4>Em Destaque</h4><p><strong>Adicionar seção → Em Destaque → Link</strong> → cole o link.</p></div></div>
-<div class="s"><div class="n">3</div><div><h4>Post com print</h4><p>Publique um post com print do portfólio e hashtags <code>#PowerBI #AnaliseDeDados #SENAI</code></p></div></div></div>
-<div class="b"><div class="bt" style="color:#f2a900">📨 PARTE 3 — Recrutadores</div>
-<div class="s"><div class="n">1</div><div><h4>Mensagem no LinkedIn</h4><p>Perfil → <strong>Conectar → Adicionar nota</strong></p>
-<div class="msg">Olá, [Nome]!\n\nVi a vaga de [Cargo] na [Empresa] e acredito que meu perfil se encaixa.\n\nPortfólio: https://seuusuario.github.io\n\nAtt, ${nome}</div></div></div>
-<div class="s"><div class="n">2</div><div><h4>Currículo</h4><p><strong>Portfólio:</strong> <code>https://seuusuario.github.io</code></p></div></div></div>
-<div class="foot">Gerado pelo Gerador de Portfólio Power BI · SENAI</div></body></html>`;}
-function download(n,c){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/html;charset=utf-8'}));a.download=n;document.body.appendChild(a);a.click();document.body.removeChild(a);}
+<div class="b"><div class="bt" style="color:#22d3a0">🐙 GitHub Pages</div>
+<div class="s"><div class="n">1</div><div><h4>Criar conta</h4><p>github.com → conta gratuita</p></div></div>
+<div class="s"><div class="n">2</div><div><h4>Repositório especial</h4><p>New → nome: <code>seuusuario.github.io</code> → Public → Create</p></div></div>
+<div class="s"><div class="n">3</div><div><h4>Upload</h4><p>Add file → Upload files → arraste o <code>index.html</code> → Commit changes</p></div></div>
+<div class="s"><div class="n">4</div><div><h4>Pronto!</h4><p><code>https://seuusuario.github.io</code> em até 2 min 🎉</p></div></div></div>
+<div class="b"><div class="bt" style="color:#4f8ef7">💼 LinkedIn</div>
+<div class="s"><div class="n">1</div><div><h4>Websites</h4><p>Editar perfil → Websites → cole o link</p></div></div>
+<div class="s"><div class="n">2</div><div><h4>Em Destaque</h4><p>Adicionar seção → Em Destaque → Link → fixado no topo</p></div></div>
+<div class="s"><div class="n">3</div><div><h4>Post</h4><p>Publique com print do portfólio · hashtags: <code>#PowerBI #SENAI</code></p></div></div></div>
+<div class="b"><div class="bt" style="color:#f2a900">📨 Recrutadores</div>
+<div class="s"><div class="n">1</div><div><h4>LinkedIn</h4><p>Perfil → Conectar → Adicionar nota → mensagem curta com link</p></div></div>
+<div class="s"><div class="n">2</div><div><h4>Currículo</h4><p>Dados pessoais: Portfólio: <code>https://seuusuario.github.io</code></p></div></div></div>
+<div class="foot">Gerado pelo Gerador de Portfólio Power BI · SENAI</div></body></html>`);
+}
+function dl(name, content) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content],{type:'text/html;charset=utf-8'}));
+  a.download = name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
 
-function copyLinkedin(){navigator.clipboard.writeText(document.getElementById('linkedinMsg').textContent).then(()=>showToast('✓ Texto copiado!'));}
-function copyRecruiter(){navigator.clipboard.writeText(document.getElementById('recruiterMsg').textContent).then(()=>showToast('✓ Mensagem copiada!'));}
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function copyText(id) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent)
+    .then(() => showToast('✓ Copiado!'));
+}
+function showToast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
 
 init();
 </script>
