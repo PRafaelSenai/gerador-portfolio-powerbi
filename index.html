@@ -483,6 +483,9 @@ function saveCache(id) {
 }
 
 function renderProjects() {
+  // Salvar DOM atual ANTES de re-renderizar (evita perda de dados)
+  projects.forEach(id => saveCache(id));
+
   const cont = document.getElementById('projectsContainer');
   cont.innerHTML = projects.map((id, idx) => {
     const ts  = thumbs[id] || { url:null, status:'none' };
@@ -532,7 +535,7 @@ function renderProjects() {
       <div class="thumb-box">${thumbHTML}</div>
       <div class="thumb-fields">
         <div class="field"><label>Nome do Projeto *</label>
-          <input id="p${id}_nome" placeholder="Ex: Dashboard de Vendas" value="${nom}">
+          <input id="p${id}_nome" placeholder="Ex: Dashboard de Vendas" value="${nom.replace(/"/g,'&quot;')}">
         </div>
         <div class="field"><label>Área</label>
           <select id="p${id}_area">${areaOpts}</select>
@@ -558,7 +561,7 @@ function renderProjects() {
 
       </div>
       <div class="field form-full"><label>Descrição breve *</label>
-        <textarea id="p${id}_desc" rows="2" placeholder="Ex: Análise de performance de vendas por região com KPIs de Receita, Ticket Médio e Meta x Realizado.">${dsc}</textarea>
+        <textarea id="p${id}_desc" rows="2" placeholder="Ex: Análise de performance de vendas por região com KPIs de Receita, Ticket Médio e Meta x Realizado.">${dsc.replace(/</g,"&lt;")}</textarea>
       </div>
       <div class="field form-full"><label>Técnicas (separadas por vírgula)</label>
         <input id="p${id}_tech" placeholder="Ex: Power Query, DAX, CALCULATE, Modelagem Estrela" value="${tch}">
@@ -675,16 +678,25 @@ function gerar() {
   const certs  = g('f_certs') ? g('f_certs').split('\n').filter(c=>c.trim()) : [];
   const skills = [...selSkills];
 
-  const projs = projects.map(id => ({
-    nome:    getC(id,'nome'),
-    area:    getC(id,'area') || 'Vendas',
-    desc:    getC(id,'desc'),
-    tech:    getC(id,'tech'),
-    link:    getC(id,'link'),
-    insight: getC(id,'insight'),
-    thumb:     thumbs[id]?.url || null,
-    iframeUrl: thumbs[id]?.iframe || null,
-  })).filter(p => p.nome);
+  const projs = projects.map(id => {
+    // Lê DOM diretamente (fonte de verdade) com fallback ao cache
+    const domNome    = document.getElementById(`p${id}_nome`)?.value.trim()    || getC(id,'nome');
+    const domArea    = document.getElementById(`p${id}_area`)?.value           || getC(id,'area') || 'Vendas';
+    const domDesc    = document.getElementById(`p${id}_desc`)?.value.trim()    || getC(id,'desc');
+    const domTech    = document.getElementById(`p${id}_tech`)?.value.trim()    || getC(id,'tech');
+    const domLink    = document.getElementById(`p${id}_link`)?.value.trim()    || getC(id,'link');
+    const domInsight = document.getElementById(`p${id}_insight`)?.value.trim() || getC(id,'insight');
+    return {
+      nome:     domNome,
+      area:     domArea,
+      desc:     domDesc,
+      tech:     domTech,
+      link:     domLink,
+      insight:  domInsight,
+      thumb:    thumbs[id]?.url    || null,
+      iframeUrl:thumbs[id]?.iframe || null,
+    };
+  }).filter(p => p.nome);
 
   const t = THEMES[selTheme];
   genHTML = buildPortHTML({ nome,cargo,cidade,email,whats,sobre,lin,git,curso,ano,certs,skills,projs,photo:photoDU,t });
