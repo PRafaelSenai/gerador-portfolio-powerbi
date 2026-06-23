@@ -246,10 +246,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <div class="info-banner">
     <span style="font-size:20px;flex-shrink:0">💡</span>
     <div>
-      <strong>Como adicionar miniatura:</strong><br>
-      • <strong>GitHub</strong> → cole o link e clique "Capturar" — carrega automático<br>
-      • <strong>Power BI Service</strong> → requer login, use "📁 Upload do print" (tire print com Win+Shift+S)<br>
-      • <strong>Outros sites públicos</strong> → cole o link e clique "Capturar"
+      <strong>Como adicionar miniatura:</strong> cole o link do projeto e clique <strong>"🔍 Capturar"</strong> — funciona com Power BI público, GitHub e qualquer site. Se não carregar, use <strong>"📁 Upload do print"</strong>.
     </div>
   </div>
   <div id="projectsContainer"></div>
@@ -499,15 +496,12 @@ function renderProjects() {
     // ─ caixa de miniatura ─
     let thumbHTML = '';
     if(ts.status === 'loading') {
-      thumbHTML = `<div class="thumb-spin"><div class="spin-ring"></div><span>Capturando…</span></div>`;
-    } else if(ts.status === 'iframe' && ts.iframe) {
-      // Power BI /view?r= foi feito para ser embutido em iframe
-      thumbHTML = `<div style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:8px">
-        <iframe src="${ts.iframe}" style="width:1200px;height:700px;border:none;transform:scale(0.183);transform-origin:top left;pointer-events:none" scrolling="no" allowfullscreen></iframe>
-        <div style="position:absolute;inset:0;cursor:default"></div>
-      </div>`;
+      thumbHTML = `<div class="thumb-spin"><div class="spin-ring"></div><span>Gerando preview…</span></div>`;
     } else if(ts.url) {
-      thumbHTML = `<img class="thumb-img" src="${ts.url}" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="thumb-ph" style="display:none"><span class="thumb-ph-icon">⚠️</span>Imagem não carregou</div>`;
+      thumbHTML = `<img class="thumb-img" src="${ts.url}"
+        onerror="this.style.display='none';this.nextSibling.style.display='flex'"
+        onload="this.style.display='block'">
+        <div class="thumb-ph" style="display:none"><span class="thumb-ph-icon">⚠️</span>Imagem não carregou.<br>Use o upload.</div>`;
     } else if(ts.status === 'error') {
       thumbHTML = `<div class="thumb-ph"><span class="thumb-ph-icon">📤</span>Não capturou.<br>Use upload abaixo</div>`;
     } else {
@@ -515,9 +509,8 @@ function renderProjects() {
     }
 
     // ─ badge de status ─
-    const badge = ts.status==='ok'      ? `<span class="tbadge tbadge-ok">✓ Miniatura carregada</span>`
-                : ts.status==='iframe'  ? `<span class="tbadge tbadge-ok">✓ Preview Power BI</span>`
-                : ts.status==='loading' ? `<span class="tbadge tbadge-loading">⏳ Carregando…</span>`
+    const badge = ts.status==='ok'      ? `<span class="tbadge tbadge-ok">✓ Preview gerado</span>`
+                : ts.status==='loading' ? `<span class="tbadge tbadge-loading">⏳ Gerando preview…</span>`
                 : ts.status==='error'   ? `<span class="tbadge tbadge-warn">⚠ Faça upload</span>`
                 :                         `<span class="tbadge tbadge-none">Sem miniatura</span>`;
 
@@ -542,7 +535,7 @@ function renderProjects() {
         </div>
         <div class="thumb-row2">
           ${badge}
-          ${(ts.url||ts.iframe) ? `<button class="tbtn tbtn-red" data-clear="${id}">✕ Remover</button>` : ''}
+          ${ts.url ? `<button class="tbtn tbtn-red" data-clear="${id}">✕ Remover</button>` : ''}
           <label class="tbtn tbtn-green" style="cursor:pointer">
             📁 Upload do print
             <input type="file" accept="image/*" data-upl="${id}" style="display:none">
@@ -605,45 +598,26 @@ async function capturar(id) {
   const link = (getC(id,'link') || '').trim();
   if(!link) { showToast('⚠ Cole o link primeiro!'); return; }
 
-  // ── Power BI público (/view?r=) → iframe embutido ──
-  if(link.includes('app.powerbi.com') || link.includes('powerbi.com/view')) {
-    thumbs[id] = { url:null, iframe:link, status:'iframe' };
-    renderProjects();
-    showToast('✓ Preview Power BI carregado!');
-    return;
-  }
+  thumbs[id] = { url:null, iframe:null, status:'loading' };
+  renderProjects();
 
-  // ── GitHub → og:image direto ──
+  // ── GitHub → og:image oficial (sem CORS, sem API key) ──
   const gh = link.match(/github\.com\/([^/]+)\/([^/?#]+)/);
   if(gh) {
-    thumbs[id] = { url:`https://opengraph.githubassets.com/1/${gh[1]}/${gh[2]}`, iframe:null, status:'ok' };
+    const url = `https://opengraph.githubassets.com/1/${gh[1]}/${gh[2]}`;
+    thumbs[id] = { url, iframe:null, status:'ok' };
     renderProjects();
     showToast('✓ Miniatura GitHub carregada!');
     return;
   }
 
-  // ── outros sites públicos → microlink screenshot ──
-  thumbs[id] = { url:null, iframe:null, status:'loading' };
+  // ── Qualquer URL pública (Power BI, sites, etc.) → thum.io screenshot ──
+  // thum.io captura como <img> direto no browser — funciona em file:// e https://
+  // Não precisa de API key para uso básico
+  const thumbUrl = `https://image.thum.io/get/width/640/crop/400/noanimate/png/${encodeURIComponent(link)}`;
+  thumbs[id] = { url:thumbUrl, iframe:null, status:'ok' };
   renderProjects();
-
-  try {
-    const url = `https://api.microlink.io/?url=${encodeURIComponent(link)}&screenshot=true&meta=false&embed=screenshot.url`;
-    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
-    if(res.ok) {
-      const j = await res.json();
-      const img = j?.data?.screenshot?.url || j?.data?.image?.url;
-      if(img) {
-        thumbs[id] = { url:img, iframe:null, status:'ok' };
-        renderProjects();
-        showToast('✓ Miniatura capturada!');
-        return;
-      }
-    }
-  } catch(_) {}
-
-  thumbs[id] = { url:null, iframe:null, status:'error' };
-  renderProjects();
-  showToast('⚠ Não capturou. Use o upload.');
+  showToast('✓ Miniatura carregada!');
 }
 
 function uploadThumb(e, id) {
@@ -755,27 +729,39 @@ function buildPortHTML({ nome,cargo,cidade,email,whats,sobre,lin,git,curso,ano,c
     const pc = AREA_COLORS[p.area] || t.accent;
     const techs = p.tech ? p.tech.split(',').map(s=>s.trim()).filter(Boolean) : [];
 
-    const hasVisual = p.thumb || p.iframeUrl;
+    // thumbnail: img com fallback silencioso
+    const hasVisual = !!(p.thumb);
     const thumbEl = hasVisual ? `
       <div style="position:relative;height:200px;overflow:hidden;border-radius:${t.cardRadius} ${t.cardRadius} 0 0;background:${t.surface2}">
-        ${p.iframeUrl
-          ? `<div style="position:absolute;inset:0;overflow:hidden;pointer-events:none"><iframe src="${p.iframeUrl}" style="width:1300px;height:760px;border:none;transform:scale(0.154);transform-origin:top left" scrolling="no" allowfullscreen></iframe></div>`
-          : `<img src="${p.thumb}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">`}
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,${t.bg}cc 100%);pointer-events:none"></div>
+        <img src="${p.thumb}"
+          style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s"
+          onmouseover="this.style.transform='scale(1.04)'"
+          onmouseout="this.style.transform='scale(1)'"
+          onerror="this.parentElement.style.display='none'">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,${t.bg}cc 100%);pointer-events:none"></div>
         <span style="position:absolute;top:10px;left:12px;background:${pc};color:#fff;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;padding:4px 10px;border-radius:20px">${p.area}</span>
-        ${p.link?`<a href="${p.link}" target="_blank" style="position:absolute;bottom:12px;right:12px;background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:11px;padding:8px 16px;border-radius:${t.cardRadius};text-decoration:none;opacity:0;transition:opacity .25s" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0\'">Ver Projeto →</a>`:''}
+        ${p.link?`<a href="${p.link}" target="_blank"
+          style="position:absolute;bottom:12px;right:12px;background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:11px;padding:8px 16px;border-radius:${t.cardRadius};text-decoration:none;opacity:0;transition:opacity .25s"
+          onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">Ver Projeto →</a>`:''}
       </div>` : `<div style="height:4px;background:${pc};border-radius:${t.cardRadius} ${t.cardRadius} 0 0"></div>`;
 
-    const techsEl = techs.length ? `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">${techs.map(tc=>`<span style="background:${t.surface2};border:1px solid ${t.border};color:${t.muted};padding:2px 9px;border-radius:4px;font-size:11px;font-family:monospace">${tc}</span>`).join('')}</div>` : '';
+    // truncar texto para não vazar o card
+    const nomeShow  = p.nome.length  > 60  ? p.nome.slice(0,57)+'…'  : p.nome;
+    const descShow  = p.desc.length  > 200 ? p.desc.slice(0,197)+'…' : p.desc;
+    const insiShow  = p.insight && p.insight.length > 120 ? p.insight.slice(0,117)+'…' : p.insight;
+
+    const techsEl = techs.length ? `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">${
+      techs.slice(0,8).map(tc=>`<span style="background:${t.surface2};border:1px solid ${t.border};color:${t.muted};padding:2px 9px;border-radius:4px;font-size:11px;font-family:monospace;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis">${tc}</span>`).join('')
+    }</div>` : '';
 
     if(t.projLayout === 'list') return `
 <div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};margin-bottom:16px;overflow:hidden">
   ${thumbEl}
   <div style="padding:20px 24px;${!hasVisual?'border-left:4px solid '+pc:''}">
-    ${!p.thumb?`<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${pc};display:block;margin-bottom:6px">${p.area}</span>`:''}
-    <h3 style="font-size:17px;font-weight:700;color:${t.text};margin-bottom:8px">${p.nome}</h3>
-    <p style="font-size:13px;color:${t.muted};line-height:1.7;margin-bottom:12px">${p.desc}</p>
-    ${p.insight?`<div style="font-size:12px;padding:8px 12px;background:${t.surface2};border-radius:4px;border-left:3px solid ${pc};margin-bottom:12px;color:${t.text}"><strong style="color:${pc}">Insight:</strong> ${p.insight}</div>`:''}
+    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${pc};display:block;margin-bottom:6px">${p.area}</span>
+    <h3 style="font-size:17px;font-weight:700;color:${t.text};margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nomeShow}</h3>
+    <p style="font-size:13px;color:${t.muted};line-height:1.7;margin-bottom:12px">${descShow}</p>
+    ${insiShow?`<div style="font-size:12px;padding:8px 12px;background:${t.surface2};border-radius:4px;border-left:3px solid ${pc};margin-bottom:12px;color:${t.text}"><strong style="color:${pc}">Insight:</strong> ${insiShow}</div>`:''}
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
       ${techsEl ? techsEl : '<div></div>'}
       ${p.link?`<a href="${p.link}" target="_blank" style="background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:12px;padding:9px 18px;border-radius:${t.cardRadius};text-decoration:none;white-space:nowrap">Ver Projeto →</a>`:''}
@@ -787,9 +773,9 @@ function buildPortHTML({ nome,cargo,cidade,email,whats,sobre,lin,git,curso,ano,c
 <div style="background:${t.surface};border:1px solid ${t.border};border-radius:${t.cardRadius};overflow:hidden">
   ${thumbEl}
   <div style="padding:20px">
-    <h3 style="font-size:16px;font-weight:700;color:${t.text};margin-bottom:8px;line-height:1.3">${p.nome}</h3>
-    <p style="font-size:13px;color:${t.muted};line-height:1.6;margin-bottom:10px">${p.desc}</p>
-    ${p.insight?`<div style="font-size:12px;padding:8px 12px;background:${t.surface2};border-radius:${t.cardRadius};margin-bottom:12px;border-left:3px solid ${pc};color:${t.text}"><strong style="color:${pc}">💡</strong> ${p.insight}</div>`:''}
+    <h3 style="font-size:16px;font-weight:700;color:${t.text};margin-bottom:8px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nomeShow}</h3>
+    <p style="font-size:13px;color:${t.muted};line-height:1.6;margin-bottom:10px">${descShow}</p>
+    ${insiShow?`<div style="font-size:12px;padding:8px 12px;background:${t.surface2};border-radius:${t.cardRadius};margin-bottom:12px;border-left:3px solid ${pc};color:${t.text}"><strong style="color:${pc}">💡</strong> ${insiShow}</div>`:''}
     ${techsEl}
     ${p.link?`<a href="${p.link}" target="_blank" style="display:inline-block;background:${t.btnColor};color:${t.btnText};font-weight:700;font-size:12px;padding:9px 18px;border-radius:${t.cardRadius};text-decoration:none">Ver Projeto →</a>`:''}
   </div>
