@@ -100,9 +100,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .tbtn-green:hover{background:rgba(34,211,160,.2)}
 .tbtn-red{background:rgba(242,95,92,.1);border-color:rgba(242,95,92,.25);color:var(--red)}
 .tbtn-red:hover{background:rgba(242,95,92,.2)}
-/* AVISO PBI */
-.pbi-box{background:rgba(242,169,0,.06);border:1px solid rgba(242,169,0,.2);border-radius:8px;padding:12px 14px;font-size:11px;color:var(--text);line-height:1.6;margin-top:8px}
-.pbi-box strong{color:var(--accent)}
 /* BANNER INFO */
 .info-banner{background:rgba(79,142,247,.07);border:1px solid rgba(79,142,247,.18);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;font-size:12px;color:var(--muted);line-height:1.6}
 .info-banner strong{color:var(--text)}
@@ -502,8 +499,6 @@ function renderProjects() {
       thumbHTML = `<div class="thumb-spin"><div class="spin-ring"></div><span>Capturando…</span></div>`;
     } else if(ts.url) {
       thumbHTML = `<img class="thumb-img" src="${ts.url}" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="thumb-ph" style="display:none"><span class="thumb-ph-icon">⚠️</span>Imagem não carregou</div>`;
-    } else if(ts.status === 'pbi') {
-      thumbHTML = `<div class="thumb-ph"><span class="thumb-ph-icon">🔐</span><strong style="color:#f2a900;font-size:10px">Power BI requer login</strong><br>Use o botão upload abaixo</div>`;
     } else if(ts.status === 'error') {
       thumbHTML = `<div class="thumb-ph"><span class="thumb-ph-icon">📤</span>Não capturou.<br>Use upload abaixo</div>`;
     } else {
@@ -513,7 +508,6 @@ function renderProjects() {
     // ─ badge de status ─
     const badge = ts.status==='ok'      ? `<span class="tbadge tbadge-ok">✓ Miniatura carregada</span>`
                 : ts.status==='loading' ? `<span class="tbadge tbadge-loading">⏳ Carregando…</span>`
-                : ts.status==='pbi'     ? `<span class="tbadge tbadge-warn">⚠ Requer upload</span>`
                 : ts.status==='error'   ? `<span class="tbadge tbadge-warn">⚠ Faça upload</span>`
                 :                         `<span class="tbadge tbadge-none">Sem miniatura</span>`;
 
@@ -554,7 +548,7 @@ function renderProjects() {
           <input id="p${id}_link" type="url" placeholder="https://app.powerbi.com/... ou https://github.com/..." style="flex:1" value="${lnk}">
           <button class="tbtn tbtn-blue" style="padding:8px 14px;font-size:12px" data-cap="${id}">🔍 Capturar</button>
         </div>
-        ${ts.status==='pbi' ? `<div class="pbi-box">⚠ <strong>Power BI Service requer login</strong> — nenhum serviço externo consegue capturar a tela automaticamente. <strong>Solução:</strong> abra o dashboard → pressione <strong>Win+Shift+S</strong> → selecione a área → salve como imagem → clique em "📁 Upload do print" acima.</div>` : ''}
+
       </div>
       <div class="field form-full"><label>Descrição breve *</label>
         <textarea id="p${id}_desc" rows="2" placeholder="Ex: Análise de performance de vendas por região com KPIs de Receita, Ticket Médio e Meta x Realizado.">${dsc}</textarea>
@@ -600,13 +594,6 @@ function renderProjects() {
 async function capturar(id) {
   const link = (getC(id,'link') || '').trim();
   if(!link) { showToast('⚠ Cole o link primeiro!'); return; }
-
-  // ── Power BI → instrução de upload ──
-  if(link.includes('app.powerbi.com') || link.includes('powerbi.com/view') || link.includes('powerbi.com/groups')) {
-    thumbs[id] = { url:null, status:'pbi' };
-    renderProjects();
-    return;
-  }
 
   // ── GitHub → og:image direto ──
   const gh = link.match(/github\.com\/([^/]+)\/([^/?#]+)/);
@@ -838,9 +825,7 @@ ${projsHTML?`
     ${projGrid}
   </section>
 </div>`:''}
-<div style="background:${t.surface};border-top:1px solid ${t.border};padding:18px;text-align:center">
-  <div style="font-size:12px;color:${t.muted}">Portfólio gerado com o Gerador de Portfólio Power BI · SENAI</div>
-</div>
+
 </body></html>`;
 }
 
